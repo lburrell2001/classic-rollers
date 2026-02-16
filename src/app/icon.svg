@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Classic Rollers CR mark">
+  <rect width="64" height="64" rx="12" fill="#0B0B0B"/>
+  <path d="M14 20h20v6H20v8h12v6H20v10h-6V20zm28 0c8 0 12 4 12 10 0 5-2 8-7 9l8 11h-8l-7-10h-2v10h-6V20h10zm-4 6v8h4c4 0 6-1 6-4s-2-4-6-4h-4z" fill="#FFFFFF"/>
+  <rect x="8" y="54" width="48" height="4" fill="#C8A24A"/>
+  <rect x="56" y="8" width="4" height="48" fill="#D11F2A"/>
+</svg>
