@@ -9,14 +9,14 @@ export const metadata: Metadata = {
 
 export default function DonatePage() {
   return (
-    <div className="bg-white">
+    <div className="min-h-screen bg-[linear-gradient(to_bottom,var(--color-accent-green)_0,var(--color-accent-green)_50vh,#ffffff_25vh,#ffffff_100%)]">
       <Section
         eyebrow="Donate"
         title="Give to the Ike Avery Scholarship Fund"
-        description="Unlimited Classic Rollers Car Club is a 501(c)(3). Donations are tax-deductible."
-        className="pt-32 text-black lg:pt-40"
-        titleClassName="text-black"
-        descriptionClassName="text-black/70"
+        description="Classic Rollers Car Club is a 501(c)(3). Donations are tax-deductible."
+        className="pt-32 text-white lg:pt-40"
+        titleClassName="text-white"
+        descriptionClassName="text-white/70"
       >
         <Card>
           <div className="space-y-3 text-black/70">
@@ -26,9 +26,7 @@ export default function DonatePage() {
             <p>
               <strong>Mail to:</strong> PO Box 5513, Amarillo, TX 79117
             </p>
-            <p>
-              <strong>Donation contacts:</strong> Randy Meneweather: (414) 403-9679 | Thurman Jefferson: (806) 433-6872
-            </p>
+          
             <p>
               <strong>Also welcome:</strong> Door prizes and giveaway items for fundraiser events.
             </p>

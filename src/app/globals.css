@@ -44,25 +44,3 @@ body {
   margin-top: -8rem;
   padding-top: 4rem;
 }
-
-.cta-strip-zigzag::before,
-.cta-strip-zigzag::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  width: 100%;
-  height: 18px;
-  background:
-    linear-gradient(-45deg, transparent 12px, white 0) 0 0 / 24px 100% repeat-x,
-    linear-gradient(45deg, transparent 12px, white 0) 12px 0 / 24px 100% repeat-x;
-  pointer-events: none;
-}
-
-.cta-strip-zigzag::before {
-  top: -18px;
-}
-
-.cta-strip-zigzag::after {
-  bottom: -18px;
-  transform: rotate(180deg);
-}

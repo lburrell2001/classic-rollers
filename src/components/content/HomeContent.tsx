@@ -3,6 +3,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useState } from "react";
+import { DonateTrigger } from "@/components/DonateTrigger";
 import { Button } from "@/components/ui/button";
 import { useSiteContent } from "@/components/SiteContentProvider";
 
@@ -62,22 +63,22 @@ export function HomeContent() {
           <img src={home.heroImage} alt={home.heroTitle} className="h-full w-full object-cover" />
           <div className="absolute inset-0 bg-linear-to-r from-white/95 via-white/75 via-45% to-transparent" />
         </div>
-        <div className="relative mx-auto flex w-full max-w-6xl flex-col justify-center px-4 pb-20 pt-40 text-black sm:px-6 lg:px-8 lg:pt-48">
-          <h1 className="max-w-3xl font-display text-5xl leading-[0.95] tracking-wide [text-shadow:0_2px_16px_rgba(255,255,255,0.35)] sm:text-7xl">
+        <div className="relative mx-auto flex w-full max-w-6xl flex-col justify-center px-4 pb-16 pt-32 text-black sm:px-6 sm:pb-20 sm:pt-40 lg:px-8 lg:pt-48">
+          <h1 className="max-w-3xl font-display text-4xl leading-[0.95] tracking-wide [text-shadow:0_2px_16px_rgba(255,255,255,0.35)] sm:text-5xl lg:text-7xl">
             {home.heroTitle}
           </h1>
-          <p className="mt-6 max-w-2xl rounded-2xl bg-white/0 px-4 py-3 text-base text-black/80 backdrop-blur-[0px] sm:text-lg">
+          <p className="mt-5 max-w-2xl rounded-2xl bg-white/0 px-0 py-2 text-sm text-black/80 sm:px-4 sm:py-3 sm:text-lg">
             {home.heroDescription}
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Button href={home.heroPrimaryCtaHref} variant="accent" size="lg">
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <Button href={home.heroPrimaryCtaHref} variant="accent" size="lg" className="w-full sm:w-auto">
               {home.heroPrimaryCtaLabel}
             </Button>
             <Button
               href={home.heroSecondaryCtaHref}
               variant="primary"
               size="lg"
-              className="border border-[var(--color-accent-green)] bg-[var(--color-accent-green)] text-white hover:brightness-110"
+              className="w-full border border-[var(--color-accent-green)] bg-[var(--color-accent-green)] text-white hover:brightness-110 sm:w-auto"
             >
               {home.heroSecondaryCtaLabel}
             </Button>
@@ -87,27 +88,25 @@ export function HomeContent() {
       </section>
 
       <section className="border-y border-black/10 bg-[var(--color-accent-green)] text-white">
-        <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-12 py-8 sm:px-6 xl:flex-row xl:items-center xl:justify-between xl:px-8 border-black/30">
+        <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8 sm:px-6 xl:flex-row xl:items-center xl:justify-between xl:px-8">
           <div className="min-w-0 xl:max-w-3xl">
-            <h2 className="font-display text-3xl tracking-wide sm:text-4xl">{featuredEvent?.title ?? "No upcoming event posted yet"}</h2>
+            <h2 className="font-display text-2xl tracking-wide sm:text-4xl">{featuredEvent?.title ?? "No upcoming event posted yet"}</h2>
             <div className="mt-3 flex flex-col gap-2 text-sm text-white/85 sm:text-base">
               <p>{featuredEvent?.date ?? "Add an event from the admin page."}</p>
               {featuredEvent?.location ? <p>{featuredEvent.location}</p> : null}
               {featuredEvent?.fee ? <p>Admission: {featuredEvent.fee}</p> : null}
             </div>
           </div>
-          <div className="flex flex-col items-start gap-4 xl:items-end">
-            <div className="grid grid-cols-4 gap-3">
+          <div className="flex w-full flex-col items-start gap-4 xl:w-auto xl:items-end">
+            <div className="grid w-full grid-cols-2 gap-3 sm:grid-cols-4">
               {countdown.map((item) => (
-                <div key={item.label} className="min-w-[88px] rounded-xl border border-black/10 bg-white px-3 py-4 text-center shadow-sm">
-                  <p className="text-2xl font-semibold text-black">{item.value}</p>
+                <div key={item.label} className="min-w-0 rounded-xl border border-black/10 bg-white px-3 py-4 text-center shadow-sm">
+                  <p className="text-xl font-semibold text-black sm:text-2xl">{item.value}</p>
                   <p className="mt-1 text-[11px] uppercase tracking-[0.2em] text-black/60">{item.label}</p>
                 </div>
               ))}
             </div>
-            <Button href="/donate" variant="accent" className="w-full sm:w-auto">
-              Donate to the Scholarship Fund
-            </Button>
+            <DonateTrigger className="w-full sm:w-auto">Donate to the Scholarship Fund</DonateTrigger>
           </div>
         </div>
       </section>
@@ -162,7 +161,7 @@ export function HomeContent() {
           <div className="overflow-hidden rounded-2xl border border-black/10 bg-white">
             <img src={home.joinImage} alt={home.joinTitle} className="h-full w-full object-cover" />
           </div>
-          <div className="flex h-full min-h-[180px] flex-col justify-center rounded-2xl border border-black/0 bg-white p-12 text-black ">
+          <div className="flex h-full min-h-[180px] flex-col justify-center rounded-2xl border border-black/0 bg-white p-6 text-black sm:p-8 lg:p-12">
             <div>
               <h3 className="font-display text-3xl tracking-wide">{home.joinTitle}</h3>
               <p className="mt-3 max-w-xl text-sm text-black/70">{home.joinDescription}</p>

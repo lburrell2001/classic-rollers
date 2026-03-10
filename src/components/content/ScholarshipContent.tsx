@@ -111,7 +111,7 @@ export function ScholarshipContent() {
   };
 
   return (
-    <div className="bg-[linear-gradient(to_bottom,var(--color-accent-green)_0,var(--color-accent-green)_70vh,#ffffff_25vh,#ffffff_100%)]">
+    <div className="bg-[linear-gradient(to_bottom,var(--color-accent-red)_0,var(--color-accent-red)_70vh,#ffffff_25vh,#ffffff_100%)]">
       <Section
         eyebrow={scholarship.eyebrow}
         title={scholarship.title}
@@ -120,7 +120,7 @@ export function ScholarshipContent() {
         titleClassName="text-white"
         descriptionClassName="text-white/70"
       >
-        <div className="flex flex-row gap-4 lg:[&>*:first-child]:basis-[70%] lg:[&>*:last-child]:basis-[130%]">
+        <div className="flex flex-col gap-4 lg:flex-row lg:[&>*:first-child]:basis-[70%] lg:[&>*:last-child]:basis-[130%]">
           <div className="grid gap-4">
             {scholarship.items.length ? (
               scholarship.items.map((item) => (

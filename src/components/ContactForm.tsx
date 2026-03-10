@@ -85,7 +85,12 @@ export function ContactForm() {
         {errors.message ? <p className="mt-1 text-xs text-[var(--color-accent-red)]">{errors.message}</p> : null}
       </div>
 
-      <Button type="submit" variant="primary" size="lg">
+      <Button
+        type="submit"
+        variant="primary"
+        size="lg"
+        className="hover:!border-[var(--color-accent-red)] hover:!bg-[var(--color-accent-red)]"
+      >
         Send Message
       </Button>
     </form>

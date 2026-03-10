@@ -9,7 +9,7 @@ export function EventsContent() {
   const events = content.events;
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(to_bottom,var(--color-accent-green)_0,var(--color-accent-green)_50vh,#ffffff_25vh,#ffffff_100%)]">
+    <div className="min-h-screen bg-[linear-gradient(to_bottom,black_0,black_50vh,#ffffff_25vh,#ffffff_100%)]">
       <Section
         eyebrow={events.eyebrow}
         title={events.title}

@@ -1,3 +1,4 @@
+import { DonateTrigger } from "@/components/DonateTrigger";
 import { Button } from "@/components/ui/button";
 
 export function CtaStrip() {
@@ -9,9 +10,7 @@ export function CtaStrip() {
           <h3 className="mt-1 font-display text-3xl tracking-wide text-black">Support the Ike Avery Scholarship Fund</h3>
         </div>
         <div className="flex flex-wrap gap-3">
-          <Button href="/donate" variant="accent">
-            Donate
-          </Button>
+          <DonateTrigger>Donate</DonateTrigger>
           <Button href="/scholarship" variant="outline">
             Scholarship Info
           </Button>

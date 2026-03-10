@@ -64,7 +64,7 @@ export function GalleryContent() {
           descriptionClassName="text-white/70"
           contentClassName="mt-10"
         >
-          <div className="columns-2 gap-0 sm:columns-3 lg:columns-4">
+          <div className="columns-1 gap-0 sm:columns-2 md:columns-3 lg:columns-4">
             {gallery.images.map((image) => (
               <button
                 key={image.id}
@@ -85,7 +85,7 @@ export function GalleryContent() {
 
       {activeImage ? (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-2 sm:p-4"
           role="dialog"
           aria-modal="true"
           aria-label={activeImage.alt || "Gallery image"}
@@ -94,7 +94,7 @@ export function GalleryContent() {
           <div className="relative max-h-[90vh] max-w-6xl" onClick={(event) => event.stopPropagation()}>
             <button
               type="button"
-              className="absolute left-3 top-1/2 z-10 inline-flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-2xl text-black shadow-sm"
+              className="absolute left-2 top-1/2 z-10 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-xl text-black shadow-sm sm:left-3 sm:h-12 sm:w-12 sm:text-2xl"
               aria-label="Previous image"
               onClick={showPreviousImage}
             >
@@ -102,7 +102,7 @@ export function GalleryContent() {
             </button>
             <button
               type="button"
-              className="absolute right-3 top-1/2 z-10 inline-flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-2xl text-black shadow-sm"
+              className="absolute right-2 top-1/2 z-10 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-xl text-black shadow-sm sm:right-3 sm:h-12 sm:w-12 sm:text-2xl"
               aria-label="Next image"
               onClick={showNextImage}
             >
@@ -110,7 +110,7 @@ export function GalleryContent() {
             </button>
             <button
               type="button"
-              className="absolute right-3 top-3 z-10 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-xl text-black shadow-sm"
+              className="absolute right-2 top-2 z-10 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-lg text-black shadow-sm sm:right-3 sm:top-3 sm:h-10 sm:w-10 sm:text-xl"
               aria-label="Close image overlay"
               onClick={() => setActiveImageId(null)}
             >

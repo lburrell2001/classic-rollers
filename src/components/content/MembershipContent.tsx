@@ -114,25 +114,19 @@ export function MembershipContent() {
           </p>
           <div className="mt-6 grid gap-5 border-t border-black/10 pt-6 lg:grid-cols-2">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-black/55">{membership.benefitsTitle}</p>
+              <p className="text-s font-bold uppercase tracking-[0.18em] text-[var(--color-accent-red)]">{membership.benefitsTitle}</p>
               <p className="mt-2 text-sm text-black/70">{membership.benefitsBody}</p>
             </div>
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-black/55">{membership.fitTitle}</p>
+              <p className="text-s font-bold uppercase tracking-[0.18em] text-[var(--color-accent-red)]">{membership.fitTitle}</p>
               <p className="mt-2 text-sm text-black/70">{membership.fitBody}</p>
             </div>
           </div>
-          <p className="mt-5 text-sm text-black/70">
+          <p className="mt-12 text-sm text-black/70">
             Use the form to apply for membership. Submissions go directly to the admin portal for review.
           </p>
-          <p className="mt-3 text-sm text-black/60">
-            Prefer a paper version?{" "}
-            <a href={membership.applicationUrl} className="font-semibold text-[var(--color-accent-red)] underline-offset-4 hover:underline">
-              {membership.applicationLabel}
-            </a>
-          </p>
 
-          <div className="mb-6 mt-10 border-t border-black/10 pt-6">
+          <div className="mb-6 mt-4 border-t border-black/10 pt-6">
             <h3 className="font-display text-3xl tracking-wide">Submit Your Membership Request</h3>
             <p className="mt-2 text-sm text-black/70">Fill out the form below and the submission will appear in the admin portal.</p>
           </div>

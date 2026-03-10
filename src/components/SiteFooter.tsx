@@ -12,13 +12,13 @@ export function SiteFooter() {
         <div className="flex flex-wrap gap-3">
           <Link
             href="/membership"
-            className="inline-flex items-center justify-center rounded-xl border border-white/20 px-5 py-3 text-sm font-semibold tracking-wide transition hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-green)] focus-visible:ring-offset-2"
+            className="inline-flex items-center justify-center rounded-xl border border-white/20 px-5 py-3 text-sm font-semibold tracking-wide transition hover:border-[var(--color-accent-green)] hover:bg-[var(--color-accent-green)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-green)] focus-visible:ring-offset-2"
           >
             Membership
           </Link>
           <Link
             href="/admin"
-            className="inline-flex items-center justify-center rounded-xl border border-white/20 px-5 py-3 text-sm font-semibold tracking-wide transition hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-green)] focus-visible:ring-offset-2"
+            className="inline-flex items-center justify-center rounded-xl border border-white/20 px-5 py-3 text-sm font-semibold tracking-wide transition hover:border-[var(--color-accent-red)] hover:bg-[var(--color-accent-red)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-green)] focus-visible:ring-offset-2"
           >
             Admin Login
           </Link>
