@@ -118,7 +118,7 @@ export const defaultSiteContent: SiteContent = {
   home: {
     heroEyebrow: "Established 1985",
     heroTitle: "Classic Rollers Car Club",
-    heroDescription: "Classic cars. Community pride.",
+    heroDescription: "A community of classic car enthusiasts in Amarillo, Texas dedicated to preserving automotive history, celebrating craftsmanship, and bringing people together through a shared love of vintage rides.",
     heroPrimaryCtaLabel: "Donate",
     heroPrimaryCtaHref: "/donate",
     heroSecondaryCtaLabel: "Join",
@@ -139,7 +139,7 @@ export const defaultSiteContent: SiteContent = {
     welcomeImage: "/gallery/car-02.svg",
     joinEyebrow: "Become One of Us",
     joinTitle: "Join the Club",
-    joinDescription: "Membership dues are $40 annually.",
+    joinDescription: "Join Classic Rollers Car Club and connect with fellow enthusiasts while supporting events, community programs, and scholarships in Amarillo.",
     joinPrimaryLabel: "Become a Member",
     joinPrimaryHref: "/membership",
     joinSecondaryLabel: "Support Scholarships",

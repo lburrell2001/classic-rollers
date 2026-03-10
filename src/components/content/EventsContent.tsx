@@ -9,14 +9,14 @@ export function EventsContent() {
   const events = content.events;
 
   return (
-    <div className="bg-white">
+    <div className="min-h-screen bg-[linear-gradient(to_bottom,var(--color-accent-green)_0,var(--color-accent-green)_50vh,#ffffff_25vh,#ffffff_100%)]">
       <Section
         eyebrow={events.eyebrow}
         title={events.title}
         description={events.description}
-        className="pt-32 text-black lg:pt-40"
-        titleClassName="text-black"
-        descriptionClassName="text-black/70"
+        className="pt-32 text-white lg:pt-40"
+        titleClassName="text-white"
+        descriptionClassName="text-white/70"
       >
         <div className="grid gap-4">
           {events.items.length ? (

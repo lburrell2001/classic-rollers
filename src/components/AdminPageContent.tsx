@@ -12,8 +12,10 @@ import { ScholarshipContent } from "@/components/content/ScholarshipContent";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { cloneDefaultSiteContent, type EventItem, type GalleryImage, type ScholarshipItem, type SiteContent } from "@/lib/site-content";
+import type { MembershipSubmission, ScholarshipSubmission } from "@/lib/submissions";
 
-type AdminSection = "home" | "events" | "scholarships" | "membership" | "gallery";
+type AdminSection = "home" | "events" | "scholarships" | "membership" | "gallery" | "membershipSubmissions" | "scholarshipSubmissions";
+type PreviewSection = "home" | "events" | "scholarships" | "membership" | "gallery";
 type PreviewMode = "desktop" | "mobile";
 const MAX_IMAGE_UPLOAD_BYTES = 4 * 1024 * 1024;
 
@@ -181,6 +183,18 @@ function SectionHeader({ title, description }: { title: string; description: str
   );
 }
 
+function formatSubmissionDate(value: string) {
+  const timestamp = Date.parse(value);
+  if (!Number.isFinite(timestamp)) {
+    return value;
+  }
+
+  return new Intl.DateTimeFormat("en-US", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(timestamp);
+}
+
 function DesktopPreviewSurface({ children }: { children: React.ReactNode }) {
   const frameRef = useRef<HTMLDivElement | null>(null);
   const surfaceRef = useRef<HTMLDivElement | null>(null);
@@ -246,7 +260,13 @@ function LivePreview({
   mode: PreviewMode;
   onModeChange: (mode: PreviewMode) => void;
 }) {
-  const previewHref = `/preview/${section}`;
+  const previewSection: PreviewSection =
+    section === "membershipSubmissions"
+      ? "membership"
+      : section === "scholarshipSubmissions"
+        ? "scholarships"
+        : section;
+  const previewHref = `/preview/${previewSection}`;
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
   const postPreviewUpdate = useCallback(() => {
@@ -338,6 +358,10 @@ export function AdminPageContent() {
   const [section, setSection] = useState<AdminSection>("home");
   const [draft, setDraft] = useState<SiteContent>(content);
   const [previewMode, setPreviewMode] = useState<PreviewMode>("desktop");
+  const [membershipSubmissions, setMembershipSubmissions] = useState<MembershipSubmission[]>([]);
+  const [scholarshipSubmissions, setScholarshipSubmissions] = useState<ScholarshipSubmission[]>([]);
+  const [submissionsError, setSubmissionsError] = useState("");
+  const [isLoadingSubmissions, setIsLoadingSubmissions] = useState(false);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -350,6 +374,38 @@ export function AdminPageContent() {
   const featuredEvent = draft.events.items[0];
   const scholarshipCount = draft.scholarship.items.length;
   const eventCount = draft.events.items.length;
+
+  const loadSubmissions = useCallback(async () => {
+    setIsLoadingSubmissions(true);
+    setSubmissionsError("");
+
+    try {
+      const response = await fetch("/api/admin/submissions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ password }),
+      });
+
+      const payload = (await response.json()) as {
+        membership?: MembershipSubmission[];
+        scholarship?: ScholarshipSubmission[];
+        error?: string;
+      };
+
+      if (!response.ok) {
+        throw new Error(payload.error || "Failed to load form submissions.");
+      }
+
+      setMembershipSubmissions(payload.membership ?? []);
+      setScholarshipSubmissions(payload.scholarship ?? []);
+    } catch (error) {
+      setSubmissionsError(error instanceof Error ? error.message : "Failed to load form submissions.");
+    } finally {
+      setIsLoadingSubmissions(false);
+    }
+  }, [password]);
 
   const saveChanges = async () => {
     setIsSaving(true);
@@ -412,6 +468,7 @@ export function AdminPageContent() {
       setDraft(content);
       setIsAuthenticated(true);
       setError("");
+      await loadSubmissions();
     } catch (unlockError) {
       setError(unlockError instanceof Error ? unlockError.message : "Incorrect password.");
     } finally {
@@ -516,9 +573,11 @@ export function AdminPageContent() {
       { id: "events", label: `Events (${eventCount})` },
       { id: "scholarships", label: `Scholarships (${scholarshipCount})` },
       { id: "membership", label: "Membership" },
+      { id: "membershipSubmissions", label: `Membership Forms (${membershipSubmissions.length})` },
+      { id: "scholarshipSubmissions", label: `Scholarship Forms (${scholarshipSubmissions.length})` },
       { id: "gallery", label: `Gallery (${draft.gallery.images.length})` },
     ] satisfies { id: AdminSection; label: string }[],
-    [draft.gallery.images.length, eventCount, scholarshipCount],
+    [draft.gallery.images.length, eventCount, membershipSubmissions.length, scholarshipCount, scholarshipSubmissions.length],
   );
 
   if (!isAuthenticated) {
@@ -562,6 +621,9 @@ export function AdminPageContent() {
             <Button type="button" variant="accent" onClick={() => void saveChanges()} disabled={isSaving}>
               {isSaving ? "Saving..." : "Save Changes"}
             </Button>
+            <Button type="button" variant="outline" onClick={() => void loadSubmissions()} disabled={isLoadingSubmissions}>
+              {isLoadingSubmissions ? "Refreshing Forms..." : "Refresh Forms"}
+            </Button>
             <Button type="button" variant="outline" onClick={restoreDefaults}>
               Reset to Defaults
             </Button>
@@ -601,6 +663,11 @@ export function AdminPageContent() {
           {saveMessage ? (
             <Card className="rounded-[2rem] border-[var(--color-accent-green)]">
               <p className="text-sm font-semibold text-[var(--color-accent-green)]">{saveMessage}</p>
+            </Card>
+          ) : null}
+          {submissionsError ? (
+            <Card className="rounded-[2rem] border-[var(--color-accent-red)]">
+              <p className="text-sm font-semibold text-[var(--color-accent-red)]">{submissionsError}</p>
             </Card>
           ) : null}
 
@@ -1051,6 +1118,97 @@ export function AdminPageContent() {
                   <Field label="Who should join text" value={draft.membership.fitBody} onChange={(value) => setDraft({ ...draft, membership: { ...draft.membership, fitBody: value } })} multiline />
                 </div>
               </Card>
+            </>
+          ) : null}
+
+          {section === "membershipSubmissions" ? (
+            <>
+              <SectionHeader
+                title="Membership Form Submissions"
+                description="Review membership applications submitted from the live site."
+              />
+              {membershipSubmissions.length ? (
+                <div className="grid gap-6">
+                  {membershipSubmissions.map((submission) => (
+                    <Card key={submission.id} className="rounded-[2rem]">
+                      <div className="flex flex-wrap items-start justify-between gap-3">
+                        <div>
+                          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-accent-red)]">Submitted {formatSubmissionDate(submission.submittedAt)}</p>
+                          <h3 className="mt-2 font-display text-3xl tracking-wide">{submission.fullName}</h3>
+                        </div>
+                        <div className="text-sm text-black/70">
+                          <p>{submission.email}</p>
+                          <p>{submission.phone}</p>
+                        </div>
+                      </div>
+                      <div className="mt-6 grid gap-5 md:grid-cols-2">
+                        <div>
+                          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-black/60">Location</p>
+                          <p className="mt-2 text-sm text-black/75">{submission.city}, {submission.state}</p>
+                        </div>
+                        <div>
+                          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-black/60">Vehicle</p>
+                          <p className="mt-2 text-sm text-black/75">{submission.vehicle}</p>
+                        </div>
+                        <div className="md:col-span-2">
+                          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-black/60">Why They Want To Join</p>
+                          <p className="mt-2 whitespace-pre-wrap text-sm text-black/75">{submission.whyJoin}</p>
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <Card className="rounded-[2rem]">
+                  <p className="text-sm text-black/70">No membership forms have been submitted yet.</p>
+                </Card>
+              )}
+            </>
+          ) : null}
+
+          {section === "scholarshipSubmissions" ? (
+            <>
+              <SectionHeader
+                title="Scholarship Form Submissions"
+                description="Review scholarship applications submitted from the live site."
+              />
+              {scholarshipSubmissions.length ? (
+                <div className="grid gap-6">
+                  {scholarshipSubmissions.map((submission) => (
+                    <Card key={submission.id} className="rounded-[2rem]">
+                      <div className="flex flex-wrap items-start justify-between gap-3">
+                        <div>
+                          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-accent-red)]">Submitted {formatSubmissionDate(submission.submittedAt)}</p>
+                          <h3 className="mt-2 font-display text-3xl tracking-wide">{submission.fullName}</h3>
+                          <p className="mt-2 text-sm font-semibold text-black/75">{submission.scholarshipTitle}</p>
+                        </div>
+                        <div className="text-sm text-black/70">
+                          <p>{submission.email}</p>
+                          <p>{submission.phone}</p>
+                        </div>
+                      </div>
+                      <div className="mt-6 grid gap-5 md:grid-cols-2">
+                        <div>
+                          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-black/60">School</p>
+                          <p className="mt-2 text-sm text-black/75">{submission.school}</p>
+                        </div>
+                        <div>
+                          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-black/60">Graduation Year</p>
+                          <p className="mt-2 text-sm text-black/75">{submission.graduationYear}</p>
+                        </div>
+                        <div className="md:col-span-2">
+                          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-black/60">Essay</p>
+                          <p className="mt-2 whitespace-pre-wrap text-sm text-black/75">{submission.essay}</p>
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <Card className="rounded-[2rem]">
+                  <p className="text-sm text-black/70">No scholarship forms have been submitted yet.</p>
+                </Card>
+              )}
             </>
           ) : null}
 

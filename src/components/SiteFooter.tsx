@@ -9,7 +9,13 @@ export function SiteFooter() {
           <p className="mt-3 text-sm text-white/70">PO Box 5513, Amarillo, TX 79117</p>
           <p className="mt-2 text-xs text-white/60">© {new Date().getFullYear()} Unlimited Classic Rollers Car Club. All rights reserved.</p>
         </div>
-        <div>
+        <div className="flex flex-wrap gap-3">
+          <Link
+            href="/membership"
+            className="inline-flex items-center justify-center rounded-xl border border-white/20 px-5 py-3 text-sm font-semibold tracking-wide transition hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-green)] focus-visible:ring-offset-2"
+          >
+            Membership
+          </Link>
           <Link
             href="/admin"
             className="inline-flex items-center justify-center rounded-xl border border-white/20 px-5 py-3 text-sm font-semibold tracking-wide transition hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-green)] focus-visible:ring-offset-2"

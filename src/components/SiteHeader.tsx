@@ -8,14 +8,13 @@ import { Button } from "@/components/ui/button";
 
 const desktopNavLinks = [
   { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
   { href: "/events", label: "Events" },
   { href: "/scholarship", label: "Scholarship" },
+  { href: "/gallery", label: "Gallery" },
 ];
 
 const mobileNavLinks = [
   { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
   { href: "/events", label: "Events" },
   { href: "/scholarship", label: "Scholarship" },
   { href: "/membership", label: "Membership" },
