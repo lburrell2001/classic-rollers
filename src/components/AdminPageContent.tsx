@@ -15,6 +15,7 @@ import { cloneDefaultSiteContent, type EventItem, type GalleryImage, type Schola
 
 type AdminSection = "home" | "events" | "scholarships" | "membership" | "gallery";
 type PreviewMode = "desktop" | "mobile";
+const MAX_IMAGE_UPLOAD_BYTES = 4 * 1024 * 1024;
 
 function Field({
   label,
@@ -98,6 +99,12 @@ function ImageDropzone({
     }
 
     if (!file.type.startsWith("image/")) {
+      setUploadError("Only image files can be uploaded.");
+      return;
+    }
+
+    if (file.size > MAX_IMAGE_UPLOAD_BYTES) {
+      setUploadError("Image must be 4 MB or smaller.");
       return;
     }
 
@@ -147,7 +154,7 @@ function ImageDropzone({
           >
             <input type="file" accept="image/*" className="hidden" onChange={(event) => void handleFiles(event.target.files)} />
             <span className="text-sm font-semibold text-black">{isUploading ? "Uploading image..." : "Drop image here or click to upload"}</span>
-            <span className="mt-1 text-xs text-black/60">Uploads go to Supabase storage immediately and are published when you save content.</span>
+            <span className="mt-1 text-xs text-black/60">Uploads go to Supabase storage immediately and are published when you save content. Max file size: 4 MB.</span>
           </label>
 
           <Field label="Image URL" value={image.src} onChange={onSrcChange} />
@@ -423,9 +430,22 @@ export function AdminPageContent() {
       body: formData,
     });
 
-    const payload = (await response.json()) as { url?: string; error?: string };
+    const raw = await response.text();
+    let payload: { url?: string; error?: string } = {};
+
+    if (raw) {
+      try {
+        payload = JSON.parse(raw) as { url?: string; error?: string };
+      } catch {
+        payload = { error: raw };
+      }
+    }
+
     if (!response.ok || !payload.url) {
-      throw new Error(payload.error || "Failed to upload image.");
+      const message = payload.error?.includes("Request Entity Too Large")
+        ? "Upload failed: the image is too large for the live site. Use an image 4 MB or smaller."
+        : payload.error || "Failed to upload image.";
+      throw new Error(message);
     }
 
     return payload.url;
