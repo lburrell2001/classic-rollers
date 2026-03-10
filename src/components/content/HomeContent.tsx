@@ -211,8 +211,8 @@ export function HomeContent() {
               },
             ].map((item) => (
               <div key={item.title} className={`rounded-2xl border p-6 shadow-sm ${item.cardClass}`}>
-                <h3 className={`font-display text-2xl tracking-wide ${item.titleClass ?? "text-white"}`}>{item.title}</h3>
-                <p className={`mt-3 text-sm ${item.bodyClass ?? "text-white/85"}`}>{item.body}</p>
+                <h3 className="font-display text-2xl tracking-wide text-white">{item.title}</h3>
+                <p className="mt-3 text-sm text-white/85">{item.body}</p>
                 <Button href={item.href} variant="outline" className={`mt-5 ${item.buttonClass}`}>
                   Learn More
                 </Button>
