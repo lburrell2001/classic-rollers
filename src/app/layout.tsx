@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Bebas_Neue, Inter } from "next/font/google";
 import "./globals.css";
-import { SiteHeader } from "@/components/SiteHeader";
-import { CtaStrip } from "@/components/CtaStrip";
-import { SiteFooter } from "@/components/SiteFooter";
+import { AppChrome } from "@/components/AppChrome";
+import { SiteContentProvider } from "@/components/SiteContentProvider";
 
 const bebasNeue = Bebas_Neue({
   subsets: ["latin"],
@@ -44,13 +43,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={`${bebasNeue.variable} ${inter.variable} bg-white font-body text-[var(--color-primary)] antialiased`}>
-        <div className="page-texture min-h-screen">
-          <SiteHeader />
-          <main>{children}</main>
-          <CtaStrip />
-          <SiteFooter />
-        </div>
+      <body className={`${bebasNeue.variable} ${inter.variable} bg-white font-body text-black antialiased`}>
+        <SiteContentProvider>
+          <AppChrome>{children}</AppChrome>
+        </SiteContentProvider>
       </body>
     </html>
   );

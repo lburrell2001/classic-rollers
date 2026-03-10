@@ -37,7 +37,7 @@ const sizeStyles: Record<ButtonSize, string> = {
 };
 
 const sharedClass =
-  "inline-flex items-center justify-center rounded-xl font-semibold tracking-wide transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-gold)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60";
+  "inline-flex items-center justify-center rounded-xl font-semibold tracking-wide transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-green)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60";
 
 export function Button(props: ButtonAsButton | ButtonAsLink) {
   const {

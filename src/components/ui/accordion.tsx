@@ -11,10 +11,12 @@ type Item = {
 type AccordionProps = {
   items: Item[];
   className?: string;
+  tone?: "light" | "dark";
 };
 
-export function Accordion({ items, className }: AccordionProps) {
+export function Accordion({ items, className, tone = "light" }: AccordionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const isDark = tone === "dark";
 
   return (
     <div className={cn("space-y-3", className)}>
@@ -22,7 +24,13 @@ export function Accordion({ items, className }: AccordionProps) {
         const isOpen = openIndex === index;
 
         return (
-          <div key={item.title} className="overflow-hidden rounded-xl border border-black/10 bg-white">
+          <div
+            key={item.title}
+            className={cn(
+              "overflow-hidden rounded-xl border",
+              isDark ? "border-white/10 bg-black text-white" : "border-black/10 bg-white",
+            )}
+          >
             <button
               type="button"
               className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left font-medium"
@@ -32,7 +40,11 @@ export function Accordion({ items, className }: AccordionProps) {
               <span>{item.title}</span>
               <span className="text-xl leading-none">{isOpen ? "-" : "+"}</span>
             </button>
-            {isOpen ? <div className="border-t border-black/10 px-5 py-4 text-sm text-black/80">{item.content}</div> : null}
+            {isOpen ? (
+              <div className={cn("border-t px-5 py-4 text-sm", isDark ? "border-white/10 text-white/80" : "border-black/10 text-black/80")}>
+                {item.content}
+              </div>
+            ) : null}
           </div>
         );
       })}
