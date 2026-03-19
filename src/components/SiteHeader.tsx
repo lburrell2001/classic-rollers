@@ -31,6 +31,7 @@ export function SiteHeader() {
   const [isScrolled, setIsScrolled] = useState(false);
   const useLightHeaderText = pathname !== "/" && !isScrolled && !mobileOpen;
   const useGreenDonateButton = pathname === "/scholarship" && !isScrolled && !mobileOpen;
+  const useLogoBadge = (pathname === "/events" || pathname === "/scholarship") && !isScrolled && !mobileOpen;
 
   useEffect(() => {
     if (!contactOpen && !donateOpen) return;
@@ -75,8 +76,10 @@ export function SiteHeader() {
           <Link
             href="/"
             className={cn(
-              "inline-flex items-center self-start pt-3 sm:pt-4",
-              useLightHeaderText ? "drop-shadow-[0_6px_18px_rgba(0,0,0,0.35)]" : "",
+              "inline-flex items-center self-start",
+              useLogoBadge
+                ? "mt-3 rounded-2xl bg-white px-4 py-3 shadow-[0_10px_30px_-18px_rgba(0,0,0,0.55)] sm:mt-4"
+                : "pt-3 sm:pt-4",
             )}
             aria-label="Classic Rollers home"
           >
