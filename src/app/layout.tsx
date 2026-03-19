@@ -38,6 +38,11 @@ export const metadata: Metadata = {
     description:
       "Classic cars. Community pride. Scholarships for Amarillo students through the Ike Avery Scholarship Fund.",
   },
+  icons: {
+    icon: "/classicrollers-logo.svg",
+    shortcut: "/classicrollers-logo.svg",
+    apple: "/classicrollers-logo.svg",
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

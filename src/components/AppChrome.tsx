@@ -7,6 +7,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 export function AppChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isChromeLessPage = pathname === "/admin" || pathname.startsWith("/preview/");
+  const mainClassName = pathname === "/" ? "-mt-24" : "page-offset";
 
   if (isChromeLessPage) {
     return <main>{children}</main>;
@@ -15,7 +16,7 @@ export function AppChrome({ children }: { children: React.ReactNode }) {
   return (
     <div className="page-texture min-h-screen">
       <SiteHeader />
-      <main className="page-offset">{children}</main>
+      <main className={mainClassName}>{children}</main>
       <SiteFooter />
     </div>
   );

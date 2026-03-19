@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -70,9 +71,16 @@ export function SiteHeader() {
           isScrolled || mobileOpen ? "border-b border-black/10 bg-white shadow-sm" : "bg-transparent",
         )}
       >
-        <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Link href="/" className={cn("font-display text-2xl tracking-wide", useLightHeaderText ? "text-white" : "text-black")}>
-            Classic Rollers
+        <div className="mx-auto flex h-24 w-full max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
+          <Link
+            href="/"
+            className={cn(
+              "inline-flex items-center self-start pt-3 sm:pt-4",
+              useLightHeaderText ? "drop-shadow-[0_6px_18px_rgba(0,0,0,0.35)]" : "",
+            )}
+            aria-label="Classic Rollers home"
+          >
+            <Image src="/classicrollers-logo.svg" alt="Classic Rollers" width={236} height={85} priority className="h-16 w-auto sm:h-[4.5rem]" />
           </Link>
 
           <nav className="hidden items-center gap-5 md:flex" aria-label="Main navigation">

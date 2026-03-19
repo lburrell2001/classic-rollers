@@ -2,6 +2,7 @@
 
 /* eslint-disable @next/next/no-img-element */
 
+import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState, type DragEvent } from "react";
 import { SiteContentPreviewProvider, useSiteContent } from "@/components/SiteContentProvider";
 import { EventsContent } from "@/components/content/EventsContent";
@@ -613,7 +614,9 @@ export function AdminPageContent() {
       <div className="border-b border-black/10 bg-white/85 backdrop-blur">
         <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 py-5 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[var(--color-accent-red)]">Classic Rollers</p>
+            <div className="inline-flex pt-4">
+              <Image src="/classicrollers-logo.svg" alt="Classic Rollers" width={268} height={96} className="h-[4.5rem] w-auto" priority />
+            </div>
             <h1 className="font-display text-4xl tracking-wide">Admin Editor</h1>
             <p className="mt-1 text-sm text-black/65">Edit the draft, then save when you are ready to publish the changes on this device.</p>
           </div>
