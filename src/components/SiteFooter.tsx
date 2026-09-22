@@ -12,19 +12,32 @@ export function SiteFooter() {
           <p className="mt-4 text-sm text-white">PO Box 5513, Amarillo, TX 79117</p>
           <p className="mt-2 text-xs text-white">© {new Date().getFullYear()} Unlimited Classic Rollers Car Club. All rights reserved.</p>
         </div>
-        <div className="flex flex-wrap gap-3">
-          <Link
-            href="/membership"
-            className="inline-flex items-center justify-center rounded-xl border border-white/20 px-5 py-3 text-sm font-semibold tracking-wide transition hover:border-[var(--color-accent-green)] hover:bg-[var(--color-accent-green)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-green)] focus-visible:ring-offset-2"
-          >
-            Membership
-          </Link>
-          <Link
-            href="/admin"
-            className="inline-flex items-center justify-center rounded-xl border border-white/20 px-5 py-3 text-sm font-semibold tracking-wide transition hover:border-[var(--color-accent-red)] hover:bg-[var(--color-accent-red)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-green)] focus-visible:ring-offset-2"
-          >
-            Admin Login
-          </Link>
+        <div className="flex flex-col gap-3 md:items-end">
+          <div className="flex flex-col gap-2 md:items-end">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-accent-green)]">Friend of the Club</p>
+            <a
+              href="https://www.texasinsurance101.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center rounded-xl border border-white/20 px-5 py-3 text-sm font-semibold tracking-wide transition hover:border-[var(--color-accent-green)] hover:bg-[var(--color-accent-green)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-green)] focus-visible:ring-offset-2"
+            >
+              Classic Car Insurance · Elaine Siegel
+            </a>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href="/membership"
+              className="inline-flex items-center justify-center rounded-xl border border-white/20 px-5 py-3 text-sm font-semibold tracking-wide transition hover:border-[var(--color-accent-green)] hover:bg-[var(--color-accent-green)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-green)] focus-visible:ring-offset-2"
+            >
+              Membership
+            </Link>
+            <Link
+              href="/admin"
+              className="inline-flex items-center justify-center rounded-xl border border-white/20 px-5 py-3 text-sm font-semibold tracking-wide transition hover:border-[var(--color-accent-red)] hover:bg-[var(--color-accent-red)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-green)] focus-visible:ring-offset-2"
+            >
+              Admin Login
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
