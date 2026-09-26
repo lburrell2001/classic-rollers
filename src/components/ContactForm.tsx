@@ -34,7 +34,7 @@ export function ContactForm() {
     const subject = encodeURIComponent(`Classic Rollers Contact from ${values.name}`);
     const body = encodeURIComponent(`${values.message}\n\nFrom: ${values.name}\nEmail: ${values.email}`);
 
-    window.location.href = `mailto:info@classicrollers.org?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:lauren@thrivecreativestudios.org?subject=${subject}&body=${body}`;
   }
 
   return (

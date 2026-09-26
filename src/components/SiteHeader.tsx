@@ -33,7 +33,7 @@ export function SiteHeader() {
   const [isScrolled, setIsScrolled] = useState(false);
   const useLightHeaderText = pathname !== "/" && !isScrolled && !mobileOpen;
   const useGreenDonateButton = pathname === "/scholarship" && !isScrolled && !mobileOpen;
-  const useLogoBadge = (pathname === "/events" || pathname === "/scholarship") && !isScrolled && !mobileOpen;
+  const useLogoBadge = (pathname === "/events" || pathname === "/scholarship" || pathname === "/insurance") && !isScrolled && !mobileOpen;
 
   useEffect(() => {
     if (!contactOpen && !donateOpen) return;
