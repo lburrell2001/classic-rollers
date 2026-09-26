@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   openGraph: {
     title,
     description,
-    url: "https://classicrollers.org/insurance",
+    url: "https://classicrollersamatx.org/insurance",
   },
   twitter: {
     title,
@@ -39,130 +39,123 @@ const jsonLd = {
   name: insurancePartner.agencyName,
   url: insurancePartner.website,
   sameAs: [insurancePartner.classicCarPage],
-  openingHours: "Mo-Fr 10:00-18:00",
   telephone: "+1-210-483-0928",
   email: insurancePartner.email,
   foundingDate: insurancePartner.foundingYear,
+  openingHours: "Mo-Fr 10:00-18:00",
   areaServed: { "@type": "State", name: "Texas" },
   employee: { "@type": "Person", name: insurancePartner.agentName, jobTitle: "Insurance Agent" },
-  sponsor: { "@type": "Organization", name: "Unlimited Classic Rollers Car Club", url: "https://classicrollers.org" },
+  sponsor: { "@type": "Organization", name: "Unlimited Classic Rollers Car Club", url: "https://classicrollersamatx.org" },
   hasOfferCatalog: {
     "@type": "OfferCatalog",
     name: "Insurance Coverage",
-    itemListElement: insurancePartner.coverage.map((item) => ({
+    itemListElement: insurancePartner.services.map((name) => ({
       "@type": "Offer",
-      itemOffered: { "@type": "Service", name: `${item.title} Insurance`, description: item.body },
+      itemOffered: { "@type": "Service", name },
     })),
   },
 };
 
+const coverage = [
+  {
+    title: "Classic & Collector Cars",
+    body: "Agreed value policies from specialty carriers for the classics, customs, and show cars that roll with the club.",
+    href: insurancePartner.classicCarPage,
+    cardClass: "border-[var(--color-accent-red)]/20 bg-[var(--color-accent-red)]",
+  },
+  {
+    title: "Everyday Drivers",
+    body: "Auto, commercial trucking, and motorcycle coverage for the vehicles you drive the rest of the week.",
+    href: insurancePartner.website,
+    cardClass: "border-[var(--color-accent-green)]/20 bg-[var(--color-accent-green)]",
+  },
+  {
+    title: "Home, RV & Business",
+    body: "Home, renters, RV, rental property, and business liability coverage for Texas families and local firms.",
+    href: insurancePartner.website,
+    cardClass: "border-black/15 bg-black",
+  },
+];
+
 export default function InsurancePage() {
   return (
-    <div className="bg-white">
+    <div className="bg-[linear-gradient(to_bottom,black_0,black_60vh,#ffffff_25vh,#ffffff_100%)]">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Section
-        title="Classic Car Insurance for the Classic Rollers"
-        description={`Every car in the Unlimited Classic Rollers Car Club is insured by ${insurancePartner.agentName} of ${insurancePartner.agencyName}, our official insurance partner.`}
-        className="pt-32 text-black lg:pt-40"
-        titleClassName="text-black"
-        descriptionClassName="text-black/70"
+        title="Classic Car Insurance"
+        description={`Every car in the Unlimited Classic Rollers Car Club is insured by ${insurancePartner.agentName} of ${insurancePartner.agencyName}, the club's official insurance partner.`}
+        className="pt-32 text-white lg:pt-40"
+        titleClassName="text-white"
+        descriptionClassName="text-white/70"
       >
-        <div className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
           <Card>
-            <h3 className="font-display text-3xl tracking-wide">Why the Club Trusts {insurancePartner.agentName}</h3>
-            <div className="mt-3 space-y-3 text-black/70">
-              <p>
-                Classic cars aren&apos;t daily drivers, and they shouldn&apos;t be insured like one. {insurancePartner.agencyName} has
-                protected Texas families since {insurancePartner.foundingYear}, and {insurancePartner.agentName} knows what our members&apos;
-                cars are worth to them.
-              </p>
-              <p>
-                As an independent agency, Texas Home &amp; Highway shops top carriers you know and trust to find the right coverage at the
-                right price, for your classic and for everything else you own.
-              </p>
-            </div>
-          </Card>
-          <div className="rounded-xl bg-[var(--color-accent-green)] p-6 text-white shadow-[0_10px_35px_-20px_rgba(0,0,0,0.35)]">
-            <h3 className="font-display text-3xl tracking-wide text-white">Get a Quote</h3>
-            <p className="mt-3 text-white/85">
-              Tell {insurancePartner.agentName} you&apos;re with the Classic Rollers.
+            <h3 className="font-display text-3xl tracking-wide">Agreed Value Coverage</h3>
+            <p className="mt-3 text-black/70">
+              A standard auto policy pays actual cash value, which is usually far less than what a classic is really worth. With agreed value
+              coverage, you and the carrier settle on your car&apos;s value when the policy is written. If it&apos;s totaled, that amount is
+              what gets paid, with no depreciation and no argument after the fact.
             </p>
-            <div className="mt-5 space-y-2 text-white">
+            <p className="mt-3 text-black/70">
+              As an independent agency protecting Texas families since {insurancePartner.foundingYear}, {insurancePartner.agencyName} compares
+              specialty classic car carriers to fit your car and how you actually drive it, from weekend cruises to a full show season.
+            </p>
+            <Button href={insurancePartner.classicCarPage} target="_blank" rel="noopener" variant="outline" className="mt-6">
+              Classic Car Insurance FAQs
+            </Button>
+          </Card>
+
+          <Card className="border-[var(--color-accent-green)]">
+            <h3 className="font-display text-3xl tracking-wide">Get a Quote</h3>
+            <p className="mt-3 text-black/70">Tell {insurancePartner.agentName} you&apos;re with the Classic Rollers.</p>
+            <div className="mt-5 space-y-2 text-black/75">
               <p>
-                <strong>Phone:</strong>{" "}
-                <a href={insurancePartner.phoneHref} className="underline underline-offset-4">
-                  {insurancePartner.phone}
-                </a>
+                <strong>Agent:</strong> {insurancePartner.agentName}
+              </p>
+              <p>
+                <strong>Phone:</strong> <a href={insurancePartner.phoneHref}>{insurancePartner.phone}</a>
               </p>
               <p className="break-all">
-                <strong>Email:</strong>{" "}
-                <a href={`mailto:${insurancePartner.email}`} className="underline underline-offset-4">
-                  {insurancePartner.email}
-                </a>
+                <strong>Email:</strong> <a href={`mailto:${insurancePartner.email}`}>{insurancePartner.email}</a>
               </p>
               <p>
                 <strong>Hours:</strong> {insurancePartner.hours}
               </p>
             </div>
-            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <a
-                href={insurancePartner.phoneHref}
-                className="inline-flex h-11 items-center justify-center rounded-xl bg-white px-5 text-sm font-semibold tracking-wide text-black transition-all hover:bg-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
-              >
-                Call Now
-              </a>
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row lg:flex-col xl:flex-row">
+              <Button href={insurancePartner.phoneHref} variant="accent">
+                Call {insurancePartner.agentName.split(" ")[0]}
+              </Button>
               <Button
                 href={insurancePartner.classicCarPage}
                 target="_blank"
                 rel="noopener"
-                variant="outline"
-                className="border-white text-white hover:bg-white/20"
+                variant="primary"
+                className="border border-[var(--color-accent-green)] bg-[var(--color-accent-green)] text-white hover:brightness-110"
               >
-                Request a Classic Car Quote
+                Request a Quote
               </Button>
             </div>
+          </Card>
+        </div>
+      </Section>
+
+      <section className="bg-white text-black">
+        <div className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+          <h2 className="text-center font-display text-4xl tracking-wide sm:text-5xl">Coverage from Texas Home &amp; Highway</h2>
+          <div className="mt-10 grid gap-4 md:grid-cols-3">
+            {coverage.map((item) => (
+              <div key={item.title} className={`rounded-2xl border p-6 text-white shadow-sm ${item.cardClass}`}>
+                <h3 className="font-display text-2xl tracking-wide text-white">{item.title}</h3>
+                <p className="mt-3 text-sm text-white/85">{item.body}</p>
+                <Button href={item.href} target="_blank" rel="noopener" variant="outline" className="mt-5 border-white text-white hover:bg-white/20">
+                  Learn More
+                </Button>
+              </div>
+            ))}
           </div>
         </div>
-      </Section>
-
-      <Section
-        title="Agreed Value, Not Market Guesswork"
-        description="A standard auto policy pays actual cash value, which is usually far less than what a collector car is really worth."
-        className="pt-0"
-        titleClassName="text-black"
-        descriptionClassName="text-black/70"
-      >
-        <div className="grid gap-4 md:grid-cols-2">
-          <Card>
-            <h3 className="font-display text-2xl tracking-wide text-[var(--color-accent-green)]">How Agreed Value Works</h3>
-            <p className="mt-2 text-sm text-black/70">
-              You and the carrier settle on your car&apos;s value when the policy is written. If it&apos;s totaled, that amount is what gets
-              paid, with no depreciation and no argument about market value after the fact.
-            </p>
-          </Card>
-          <Card>
-            <h3 className="font-display text-2xl tracking-wide text-[var(--color-accent-green)]">Specialty Carriers, Compared for You</h3>
-            <p className="mt-2 text-sm text-black/70">
-              {insurancePartner.agentName} compares specialty classic car carriers to find the right fit for your car and how you actually
-              drive it, whether that&apos;s weekend cruises or a full show season.
-            </p>
-          </Card>
-        </div>
-        <Button href={insurancePartner.classicCarPage} target="_blank" rel="noopener" variant="outline" className="mt-6">
-          Classic Car Insurance FAQs at Texas Home &amp; Highway
-        </Button>
-      </Section>
-
-      <Section title="Coverage from Texas Home & Highway" className="pt-0" titleClassName="text-black">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {insurancePartner.coverage.map((item) => (
-            <Card key={item.title}>
-              <h3 className="font-display text-2xl tracking-wide text-[var(--color-accent-red)]">{item.title}</h3>
-              <p className="mt-2 text-sm text-black/70">{item.body}</p>
-            </Card>
-          ))}
-        </div>
-      </Section>
+      </section>
     </div>
   );
 }

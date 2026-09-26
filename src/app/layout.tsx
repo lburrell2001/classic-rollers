@@ -16,7 +16,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://classicrollers.org"),
+  metadataBase: new URL("https://classicrollersamatx.org"),
   title: {
     default: "Unlimited Classic Rollers Car Club",
     template: "%s | Classic Rollers",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     title: "Unlimited Classic Rollers Car Club",
     description:
       "Classic cars. Community pride. Scholarships for Amarillo students through the Ike Avery Scholarship Fund.",
-    url: "https://classicrollers.org",
+    url: "https://classicrollersamatx.org",
     siteName: "Classic Rollers",
     locale: "en_US",
     type: "website",

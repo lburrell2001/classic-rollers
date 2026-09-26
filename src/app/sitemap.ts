@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const baseUrl = "https://classicrollers.org";
+const baseUrl = "https://classicrollersamatx.org";
 const routes = ["", "/events", "/scholarship", "/membership", "/gallery", "/about", "/donate", "/insurance"];
 
 export default function sitemap(): MetadataRoute.Sitemap {
