@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { insurancePartner } from "@/lib/insurance-partner";
 
 export function SiteFooter() {
   return (
@@ -14,15 +15,19 @@ export function SiteFooter() {
         </div>
         <div className="flex flex-col gap-3 md:items-end">
           <div className="flex flex-col gap-2 md:items-end">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-accent-green)]">Friend of the Club</p>
-            <a
-              href="https://www.texasinsurance101.com"
-              target="_blank"
-              rel="noopener noreferrer"
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-accent-green)]">Official Insurance Partner</p>
+            <Link
+              href="/insurance"
               className="inline-flex items-center justify-center rounded-xl border border-white/20 px-5 py-3 text-sm font-semibold tracking-wide transition hover:border-[var(--color-accent-green)] hover:bg-[var(--color-accent-green)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-green)] focus-visible:ring-offset-2"
             >
-              Classic Car Insurance · Elaine Siegel
-            </a>
+              {insurancePartner.agencyName}
+            </Link>
+            <p className="text-xs text-white/70">
+              Club cars insured by {insurancePartner.agentName} ·{" "}
+              <a href={insurancePartner.phoneHref} className="underline underline-offset-2 hover:text-white">
+                {insurancePartner.phone}
+              </a>
+            </p>
           </div>
           <div className="flex flex-wrap gap-3">
             <Link

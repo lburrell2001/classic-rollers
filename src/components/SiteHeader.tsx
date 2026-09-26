@@ -13,6 +13,7 @@ const desktopNavLinks = [
   { href: "/events", label: "Events" },
   { href: "/scholarship", label: "Scholarship" },
   { href: "/gallery", label: "Gallery" },
+  { href: "/insurance", label: "Insurance" },
 ];
 
 const mobileNavLinks = [
@@ -21,6 +22,7 @@ const mobileNavLinks = [
   { href: "/scholarship", label: "Scholarship" },
   { href: "/membership", label: "Membership" },
   { href: "/gallery", label: "Gallery" },
+  { href: "/insurance", label: "Insurance" },
 ];
 
 export function SiteHeader() {

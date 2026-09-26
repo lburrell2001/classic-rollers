@@ -4,6 +4,7 @@
 
 import { useEffect, useState } from "react";
 import { DonateTrigger } from "@/components/DonateTrigger";
+import { InsurancePartnerFeature } from "@/components/InsurancePartnerFeature";
 import { Button } from "@/components/ui/button";
 import { useSiteContent } from "@/components/SiteContentProvider";
 
@@ -220,6 +221,8 @@ export function HomeContent() {
           </div>
         </div>
       </section>
+
+      <InsurancePartnerFeature />
     </>
   );
 }
