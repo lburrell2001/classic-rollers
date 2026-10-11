@@ -13,9 +13,9 @@ import { ScholarshipContent } from "@/components/content/ScholarshipContent";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { cloneDefaultSiteContent, type EventItem, type GalleryImage, type ScholarshipItem, type SiteContent } from "@/lib/site-content";
-import type { MembershipSubmission, ScholarshipSubmission } from "@/lib/submissions";
+import type { DonationSubmission, MembershipSubmission, ScholarshipSubmission } from "@/lib/submissions";
 
-type AdminSection = "home" | "events" | "scholarships" | "membership" | "gallery" | "membershipSubmissions" | "scholarshipSubmissions";
+type AdminSection = "home" | "events" | "scholarships" | "membership" | "gallery" | "membershipSubmissions" | "scholarshipSubmissions" | "donationSubmissions";
 type PreviewSection = "home" | "events" | "scholarships" | "membership" | "gallery";
 type PreviewMode = "desktop" | "mobile";
 const MAX_IMAGE_UPLOAD_BYTES = 4 * 1024 * 1024;
@@ -266,7 +266,9 @@ function LivePreview({
       ? "membership"
       : section === "scholarshipSubmissions"
         ? "scholarships"
-        : section;
+        : section === "donationSubmissions"
+          ? "home"
+          : section;
   const previewHref = `/preview/${previewSection}`;
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
@@ -361,6 +363,7 @@ export function AdminPageContent() {
   const [previewMode, setPreviewMode] = useState<PreviewMode>("desktop");
   const [membershipSubmissions, setMembershipSubmissions] = useState<MembershipSubmission[]>([]);
   const [scholarshipSubmissions, setScholarshipSubmissions] = useState<ScholarshipSubmission[]>([]);
+  const [donationSubmissions, setDonationSubmissions] = useState<DonationSubmission[]>([]);
   const [submissionsError, setSubmissionsError] = useState("");
   const [isLoadingSubmissions, setIsLoadingSubmissions] = useState(false);
 
@@ -392,6 +395,7 @@ export function AdminPageContent() {
       const payload = (await response.json()) as {
         membership?: MembershipSubmission[];
         scholarship?: ScholarshipSubmission[];
+        donation?: DonationSubmission[];
         error?: string;
       };
 
@@ -401,6 +405,7 @@ export function AdminPageContent() {
 
       setMembershipSubmissions(payload.membership ?? []);
       setScholarshipSubmissions(payload.scholarship ?? []);
+      setDonationSubmissions(payload.donation ?? []);
     } catch (error) {
       setSubmissionsError(error instanceof Error ? error.message : "Failed to load form submissions.");
     } finally {
@@ -576,9 +581,10 @@ export function AdminPageContent() {
       { id: "membership", label: "Membership" },
       { id: "membershipSubmissions", label: `Membership Forms (${membershipSubmissions.length})` },
       { id: "scholarshipSubmissions", label: `Scholarship Forms (${scholarshipSubmissions.length})` },
+      { id: "donationSubmissions", label: `Donation Forms (${donationSubmissions.length})` },
       { id: "gallery", label: `Gallery (${draft.gallery.images.length})` },
     ] satisfies { id: AdminSection; label: string }[],
-    [draft.gallery.images.length, eventCount, membershipSubmissions.length, scholarshipCount, scholarshipSubmissions.length],
+    [donationSubmissions.length, draft.gallery.images.length, eventCount, membershipSubmissions.length, scholarshipCount, scholarshipSubmissions.length],
   );
 
   if (!isAuthenticated) {
@@ -1164,6 +1170,53 @@ export function AdminPageContent() {
               ) : (
                 <Card className="rounded-[2rem]">
                   <p className="text-sm text-black/70">No membership forms have been submitted yet.</p>
+                </Card>
+              )}
+            </>
+          ) : null}
+
+          {section === "donationSubmissions" ? (
+            <>
+              <SectionHeader
+                title="Donation Form Submissions"
+                description="People who let the club know a donation is on the way. No payment is collected online."
+              />
+              {donationSubmissions.length ? (
+                <div className="grid gap-6">
+                  {donationSubmissions.map((submission) => (
+                    <Card key={submission.id} className="rounded-[2rem]">
+                      <div className="flex flex-wrap items-start justify-between gap-3">
+                        <div>
+                          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-accent-red)]">Submitted {formatSubmissionDate(submission.submittedAt)}</p>
+                          <h3 className="mt-2 font-display text-3xl tracking-wide">{submission.fullName}</h3>
+                        </div>
+                        <div className="text-sm text-black/70">
+                          <p>{submission.email}</p>
+                          {submission.phone ? <p>{submission.phone}</p> : null}
+                        </div>
+                      </div>
+                      <div className="mt-6 grid gap-5 md:grid-cols-2">
+                        <div>
+                          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-black/60">Type of Gift</p>
+                          <p className="mt-2 text-sm text-black/75">{submission.giftType}</p>
+                        </div>
+                        <div>
+                          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-black/60">Amount or Item</p>
+                          <p className="mt-2 text-sm text-black/75">{submission.amount || "Not specified"}</p>
+                        </div>
+                        {submission.message ? (
+                          <div className="md:col-span-2">
+                            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-black/60">Message</p>
+                            <p className="mt-2 whitespace-pre-wrap text-sm text-black/75">{submission.message}</p>
+                          </div>
+                        ) : null}
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <Card className="rounded-[2rem]">
+                  <p className="text-sm text-black/70">No donation forms have been submitted yet.</p>
                 </Card>
               )}
             </>

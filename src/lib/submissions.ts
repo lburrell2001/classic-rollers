@@ -23,14 +23,27 @@ export type ScholarshipSubmission = {
   essay: string;
 };
 
+export type DonationSubmission = {
+  id: string;
+  submittedAt: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  giftType: string;
+  amount: string;
+  message: string;
+};
+
 export type SubmissionStore = {
   membership: MembershipSubmission[];
   scholarship: ScholarshipSubmission[];
+  donation: DonationSubmission[];
 };
 
 export function cloneDefaultSubmissionStore(): SubmissionStore {
   return {
     membership: [],
     scholarship: [],
+    donation: [],
   };
 }

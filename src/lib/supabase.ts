@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { cloneDefaultSiteContent, mergeWithDefaults, type SiteContent } from "@/lib/site-content";
-import { cloneDefaultSubmissionStore, type MembershipSubmission, type ScholarshipSubmission, type SubmissionStore } from "@/lib/submissions";
+import { cloneDefaultSubmissionStore, type DonationSubmission, type MembershipSubmission, type ScholarshipSubmission, type SubmissionStore } from "@/lib/submissions";
 
 export const SITE_IMAGES_BUCKET = process.env.SUPABASE_SITE_IMAGES_BUCKET ?? "site-images";
 export const SITE_CONTENT_FILE_PATH = "__content/site-content.json";
@@ -197,6 +197,7 @@ export async function readSubmissionStore() {
   return {
     membership: store.membership ?? [],
     scholarship: store.scholarship ?? [],
+    donation: store.donation ?? [],
   } satisfies SubmissionStore;
 }
 
@@ -228,6 +229,23 @@ export async function appendScholarshipSubmission(submission: Omit<ScholarshipSu
   const nextStore: SubmissionStore = {
     ...store,
     scholarship: [nextSubmission, ...store.scholarship],
+  };
+
+  await writeJsonToBucket(ADMIN_DATA_BUCKET, SUBMISSIONS_FILE_PATH, nextStore);
+  return nextSubmission;
+}
+
+export async function appendDonationSubmission(submission: Omit<DonationSubmission, "id" | "submittedAt">) {
+  const store = await readSubmissionStore();
+  const nextSubmission: DonationSubmission = {
+    id: `donation-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    submittedAt: new Date().toISOString(),
+    ...submission,
+  };
+
+  const nextStore: SubmissionStore = {
+    ...store,
+    donation: [nextSubmission, ...store.donation],
   };
 
   await writeJsonToBucket(ADMIN_DATA_BUCKET, SUBMISSIONS_FILE_PATH, nextStore);

@@ -1,22 +1,5 @@
 export const insurancePartner = {
   agencyName: "Texas Home & Highway Insurance Services",
   agentName: "Elaine Siegel",
-  website: "https://www.texasinsurance101.com",
   classicCarPage: "https://www.texasinsurance101.com/classic-car-insurance",
-  phone: "(210) 483-0928",
-  phoneHref: "tel:+12104830928",
-  email: "Texashomeandhighwayins@gmail.com",
-  foundingYear: "2004",
-  hours: "Mon–Fri 10 am – 6 pm, flexible by appointment",
-  services: [
-    "Classic Car Insurance",
-    "Auto Insurance",
-    "Commercial Trucking Insurance",
-    "Home Insurance",
-    "Renters Insurance",
-    "Motorcycle Insurance",
-    "RV Insurance",
-    "Rental Property Insurance",
-    "Business Insurance",
-  ],
 } as const;

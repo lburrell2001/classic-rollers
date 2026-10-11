@@ -8,7 +8,6 @@ const footerLinks = [
   { href: "/gallery", label: "Gallery" },
   { href: "/about", label: "About" },
   { href: "/donate", label: "Donate" },
-  { href: "/insurance", label: "Insurance" },
 ];
 
 export function SiteFooter() {
@@ -37,16 +36,15 @@ export function SiteFooter() {
         </nav>
 
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wider text-white/50">Official Insurance Partner</p>
-          <Link href="/insurance" className="mt-3 inline-block text-sm font-semibold text-white hover:text-[var(--color-accent-green)]">
-            {insurancePartner.agencyName}
-          </Link>
-          <p className="mt-1 text-sm text-white/70">
-            {insurancePartner.agentName} ·{" "}
-            <a href={insurancePartner.phoneHref} className="hover:text-white">
-              {insurancePartner.phone}
-            </a>
-          </p>
+          <p className="text-xs font-semibold uppercase tracking-wider text-white/50">Classic Car Insurance</p>
+          <a
+            href={insurancePartner.classicCarPage}
+            target="_blank"
+            rel="noopener"
+            className="mt-3 inline-block text-sm font-semibold text-white hover:text-[var(--color-accent-green)]"
+          >
+            Need classic car insurance? Get a quote →
+          </a>
         </div>
       </div>
 

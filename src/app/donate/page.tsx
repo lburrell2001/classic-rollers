@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { Section } from "@/components/Section";
-import { Card } from "@/components/ui/card";
+import { DonateContent } from "@/components/content/DonateContent";
 
 export const metadata: Metadata = {
   title: "Donate",
@@ -8,31 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function DonatePage() {
-  return (
-    <div className="min-h-screen bg-[linear-gradient(to_bottom,var(--color-accent-green)_0,var(--color-accent-green)_50vh,#ffffff_25vh,#ffffff_100%)]">
-      <Section
-        eyebrow="Donate"
-        title="Give to the Ike Avery Scholarship Fund"
-        description="Classic Rollers Car Club is a 501(c)(3). Donations are tax-deductible."
-        className="pt-24 text-white sm:pt-28 lg:pt-32"
-        titleClassName="text-white"
-        descriptionClassName="text-white/70"
-      >
-        <Card>
-          <div className="space-y-3 text-black/70">
-            <p>
-              <strong>Checks payable to:</strong> Unlimited Classic Rollers Car Club
-            </p>
-            <p>
-              <strong>Mail to:</strong> PO Box 5513, Amarillo, TX 79117
-            </p>
-          
-            <p>
-              <strong>Also welcome:</strong> Door prizes and giveaway items for fundraiser events.
-            </p>
-          </div>
-        </Card>
-      </Section>
-    </div>
-  );
+  return <DonateContent />;
 }

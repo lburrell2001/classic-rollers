@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ContactForm } from "@/components/ContactForm";
 import { DonateTrigger } from "@/components/DonateTrigger";
+import { Button } from "@/components/ui/button";
 import { scholarshipEnabled } from "@/lib/features";
 import { cn } from "@/lib/utils";
 
@@ -15,11 +16,10 @@ const navLinks = [
   ...(scholarshipEnabled ? [{ href: "/scholarship", label: "Scholarship" }] : []),
   { href: "/membership", label: "Membership" },
   { href: "/gallery", label: "Gallery" },
-  { href: "/insurance", label: "Insurance" },
 ];
 
 // Pages whose hero sits on a dark or colored background behind the transparent header.
-const darkHeroPaths = ["/about", "/events", "/scholarship", "/membership", "/gallery", "/donate", "/insurance"];
+const darkHeroPaths = ["/about", "/events", "/scholarship", "/membership", "/gallery", "/donate"];
 
 function CloseIcon() {
   return (
@@ -115,8 +115,14 @@ export function SiteHeader() {
   useEffect(() => {
     const openDonate = () => setDonateOpen(true);
 
+    const openContact = () => setContactOpen(true);
+
     window.addEventListener("open-donate", openDonate);
-    return () => window.removeEventListener("open-donate", openDonate);
+    window.addEventListener("open-contact", openContact);
+    return () => {
+      window.removeEventListener("open-donate", openDonate);
+      window.removeEventListener("open-contact", openContact);
+    };
   }, []);
 
   useEffect(() => {
@@ -282,6 +288,9 @@ export function SiteHeader() {
               <dd>Door prizes and giveaway items for fundraiser events.</dd>
             </div>
           </dl>
+          <Button href="/donate" variant="green" className="mt-5 w-full sm:w-auto" onClick={() => setDonateOpen(false)}>
+            Fill Out the Donation Form
+          </Button>
         </Modal>
       ) : null}
     </>
