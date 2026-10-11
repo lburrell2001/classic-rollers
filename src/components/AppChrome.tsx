@@ -13,9 +13,9 @@ export function AppChrome({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="page-texture min-h-screen">
+    <div className="flex min-h-screen flex-col bg-white">
       <SiteHeader />
-      <main className="-mt-24">{children}</main>
+      <main className="-mt-16 flex-1 sm:-mt-20">{children}</main>
       <SiteFooter />
     </div>
   );

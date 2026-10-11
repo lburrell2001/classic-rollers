@@ -40,7 +40,7 @@ export function ContactForm() {
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-4">
       <div>
-        <label htmlFor="name" className="mb-1 block text-sm font-semibold">
+        <label htmlFor="name" className="mb-1.5 block text-sm font-medium text-black/80">
           Name
         </label>
         <input
@@ -48,14 +48,14 @@ export function ContactForm() {
           name="name"
           value={values.name}
           onChange={(event) => setValues((prev) => ({ ...prev, name: event.target.value }))}
-          className="w-full rounded-xl border border-black/20 px-4 py-3 outline-none transition focus:border-[var(--color-accent-red)]"
+          className="w-full rounded-md border border-black/20 px-3 py-2.5 text-[15px] outline-none transition focus:border-[var(--color-accent-red)] focus:ring-2 focus:ring-[var(--color-accent-red)]/15"
           autoComplete="name"
         />
         {errors.name ? <p className="mt-1 text-xs text-[var(--color-accent-red)]">{errors.name}</p> : null}
       </div>
 
       <div>
-        <label htmlFor="email" className="mb-1 block text-sm font-semibold">
+        <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-black/80">
           Email
         </label>
         <input
@@ -64,14 +64,14 @@ export function ContactForm() {
           type="email"
           value={values.email}
           onChange={(event) => setValues((prev) => ({ ...prev, email: event.target.value }))}
-          className="w-full rounded-xl border border-black/20 px-4 py-3 outline-none transition focus:border-[var(--color-accent-red)]"
+          className="w-full rounded-md border border-black/20 px-3 py-2.5 text-[15px] outline-none transition focus:border-[var(--color-accent-red)] focus:ring-2 focus:ring-[var(--color-accent-red)]/15"
           autoComplete="email"
         />
         {errors.email ? <p className="mt-1 text-xs text-[var(--color-accent-red)]">{errors.email}</p> : null}
       </div>
 
       <div>
-        <label htmlFor="message" className="mb-1 block text-sm font-semibold">
+        <label htmlFor="message" className="mb-1.5 block text-sm font-medium text-black/80">
           Message
         </label>
         <textarea
@@ -80,7 +80,7 @@ export function ContactForm() {
           rows={5}
           value={values.message}
           onChange={(event) => setValues((prev) => ({ ...prev, message: event.target.value }))}
-          className="w-full rounded-xl border border-black/20 px-4 py-3 outline-none transition focus:border-[var(--color-accent-red)]"
+          className="w-full rounded-md border border-black/20 px-3 py-2.5 text-[15px] outline-none transition focus:border-[var(--color-accent-red)] focus:ring-2 focus:ring-[var(--color-accent-red)]/15"
         />
         {errors.message ? <p className="mt-1 text-xs text-[var(--color-accent-red)]">{errors.message}</p> : null}
       </div>
@@ -89,7 +89,7 @@ export function ContactForm() {
         type="submit"
         variant="primary"
         size="lg"
-        className="hover:!border-[var(--color-accent-red)] hover:!bg-[var(--color-accent-red)]"
+        className="w-full sm:w-auto"
       >
         Send Message
       </Button>

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { ScholarshipContent } from "@/components/content/ScholarshipContent";
+import { scholarshipEnabled } from "@/lib/features";
 
 export const metadata: Metadata = {
   title: "Scholarship",
@@ -7,5 +9,9 @@ export const metadata: Metadata = {
 };
 
 export default function ScholarshipPage() {
+  if (!scholarshipEnabled) {
+    notFound();
+  }
+
   return <ScholarshipContent />;
 }

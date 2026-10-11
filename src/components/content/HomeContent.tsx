@@ -2,11 +2,12 @@
 
 /* eslint-disable @next/next/no-img-element */
 
-import { useEffect, useState } from "react";
-import { DonateTrigger } from "@/components/DonateTrigger";
+import Link from "next/link";
 import { InsurancePartnerFeature } from "@/components/InsurancePartnerFeature";
 import { Button } from "@/components/ui/button";
 import { useSiteContent } from "@/components/SiteContentProvider";
+import { getUpcomingEvents, useNow } from "@/lib/events";
+import { scholarshipEnabled } from "@/lib/features";
 
 function getCountdownParts(dateText?: string, currentTime = Date.now()) {
   const timestamp = dateText ? Date.parse(dateText) : Number.NaN;
@@ -38,144 +39,109 @@ function getCountdownParts(dateText?: string, currentTime = Date.now()) {
 export function HomeContent() {
   const { content } = useSiteContent();
   const home = content.home;
-  const featuredEvent = content.events.items[0];
-  const [now, setNow] = useState<number | null>(null);
+  const now = useNow();
+  const featuredEvent = getUpcomingEvents(content.events.items, now)[0];
+  const hasCountdown = Boolean(featuredEvent?.countdownAt);
+  const countdown = getCountdownParts(featuredEvent?.countdownAt, now ?? undefined);
 
-  useEffect(() => {
-    const frame = window.requestAnimationFrame(() => {
-      setNow(Date.now());
-    });
-    const interval = window.setInterval(() => {
-      setNow(Date.now());
-    }, 1000);
+  const missions = [
+    { title: home.missionOneTitle, body: home.missionOneBody, href: home.missionOneHref, accent: "bg-[var(--color-accent-red)]" },
+    { title: home.missionTwoTitle, body: home.missionTwoBody, href: home.missionTwoHref, accent: "bg-[var(--color-accent-green)]" },
+    { title: home.missionThreeTitle, body: home.missionThreeBody, href: home.missionThreeHref, accent: "bg-white" },
+  ].map((mission) =>
+    !scholarshipEnabled && mission.href.startsWith("/scholarship")
+      ? { ...mission, title: "Events", body: "Car shows, cruises, and fundraisers around Amarillo all year long.", href: "/events" }
+      : mission,
+  );
 
-    return () => {
-      window.cancelAnimationFrame(frame);
-      window.clearInterval(interval);
-    };
-  }, [featuredEvent?.countdownAt]);
-
-  const countdown = now === null ? getCountdownParts(undefined) : getCountdownParts(featuredEvent?.countdownAt, now);
+  const galleryImages = content.gallery.images.map((image) => image.src);
+  const missionImages = [0, 1, 2].map((index) => galleryImages[index] ?? [home.heroImage, home.welcomeImage, home.joinImage][index]);
 
   return (
     <>
-      <section className="relative min-h-[75vh] overflow-hidden bg-white text-black">
+      <section className="relative overflow-hidden bg-white text-black">
         <div className="absolute inset-0">
-          <img src={home.heroImage} alt={home.heroTitle} className="h-full w-full object-cover" />
-          <div className="absolute inset-0 bg-linear-to-r from-white/95 via-white/75 via-45% to-transparent" />
+          <img src={home.heroImage} alt="" className="h-full w-full object-cover" />
+          <div className="absolute inset-0 bg-white/80 sm:bg-transparent sm:bg-linear-to-r sm:from-white/95 sm:via-white/80 sm:via-45% sm:to-transparent" />
         </div>
-        <div className="relative mx-auto flex w-full max-w-6xl flex-col justify-center px-4 pb-16 pt-32 text-black sm:px-6 sm:pb-20 sm:pt-40 lg:px-8 lg:pt-48">
-          <h1 className="max-w-3xl font-display text-4xl leading-[0.95] tracking-wide [text-shadow:0_2px_16px_rgba(255,255,255,0.35)] sm:text-5xl lg:text-7xl">
-            {home.heroTitle}
-          </h1>
-          <p className="mt-5 max-w-2xl rounded-2xl bg-white/0 px-0 py-2 text-sm text-black/80 sm:px-4 sm:py-3 sm:text-lg">
-            {home.heroDescription}
-          </p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <Button href={home.heroPrimaryCtaHref} variant="accent" size="lg" className="w-full sm:w-auto">
+        <div className="relative mx-auto flex w-full max-w-6xl flex-col justify-center px-4 pb-14 pt-28 sm:px-6 sm:pb-20 sm:pt-36 lg:min-h-[640px] lg:px-8">
+          <p className="text-xs font-semibold uppercase tracking-wider text-[var(--color-accent-red)]">{home.heroEyebrow}</p>
+          <h1 className="mt-2 max-w-2xl font-display text-5xl leading-[0.9] tracking-wide sm:text-6xl lg:text-7xl">{home.heroTitle}</h1>
+          <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-black/75 sm:text-base">{home.heroDescription}</p>
+          <div className="mt-6 flex flex-wrap gap-2.5">
+            <Button href={home.heroPrimaryCtaHref} variant="accent" size="lg">
               {home.heroPrimaryCtaLabel}
             </Button>
-            <Button
-              href={home.heroSecondaryCtaHref}
-              variant="primary"
-              size="lg"
-              className="w-full border border-[var(--color-accent-green)] bg-[var(--color-accent-green)] text-white hover:brightness-110 sm:w-auto"
-            >
+            <Button href={home.heroSecondaryCtaHref} variant="green" size="lg">
               {home.heroSecondaryCtaLabel}
             </Button>
-            
           </div>
         </div>
       </section>
 
-      <section className="border-y border-black/10 bg-[var(--color-accent-green)] text-white">
-        <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8 sm:px-6 xl:flex-row xl:items-center xl:justify-between xl:px-8">
-          <div className="min-w-0 xl:max-w-3xl">
-            <h2 className="font-display text-2xl tracking-wide sm:text-4xl">{featuredEvent?.title ?? "No upcoming event posted yet"}</h2>
-            <div className="mt-3 flex flex-col gap-2 text-sm text-white/85 sm:text-base">
-              <p>{featuredEvent?.date ?? "Add an event from the admin page."}</p>
-              {featuredEvent?.location ? <p>{featuredEvent.location}</p> : null}
-              {featuredEvent?.fee ? <p>Admission: {featuredEvent.fee}</p> : null}
+      {featuredEvent ? (
+        <section className="bg-[var(--color-accent-green)] text-white">
+          <div className="mx-auto flex w-full max-w-6xl flex-col gap-5 px-4 py-6 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:px-8">
+            <div className="min-w-0">
+              <p className="text-xs font-semibold uppercase tracking-wider text-white/70">Next event</p>
+              <h2 className="mt-1 font-display text-2xl leading-tight tracking-wide sm:text-3xl">{featuredEvent.title}</h2>
+              <div className="mt-2 space-y-0.5 text-sm text-white/85">
+                <p>{featuredEvent.date}</p>
+                {featuredEvent.location ? <p>{featuredEvent.location}</p> : null}
+                {featuredEvent.fee ? <p>Admission: {featuredEvent.fee}</p> : null}
+              </div>
             </div>
-          </div>
-          <div className="flex w-full flex-col items-start gap-4 xl:w-auto xl:items-end">
-            <div className="grid w-full grid-cols-2 gap-3 sm:grid-cols-4">
-              {countdown.map((item) => (
-                <div key={item.label} className="min-w-0 rounded-xl border border-black/10 bg-white px-3 py-4 text-center shadow-sm">
-                  <p className="text-xl font-semibold text-black sm:text-2xl">{item.value}</p>
-                  <p className="mt-1 text-[11px] uppercase tracking-[0.2em] text-black/60">{item.label}</p>
-                </div>
-              ))}
-            </div>
-            <DonateTrigger className="w-full sm:w-auto">Donate to the Scholarship Fund</DonateTrigger>
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-white text-black">
-        <div className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-14 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8">
-          <div>
-            <h2 className="font-display text-4xl tracking-wide sm:text-5xl">{home.welcomeTitle}</h2>
-            <p className="mt-4 text-sm text-black/70">{home.welcomeDescription}</p>
-            <div className="mt-8 grid grid-cols-1 gap-4">
-              {[
-                {
-                  title: "Community First",
-                  body: "Built on fellowship, service, and pride in every event we host.",
-                },
-                {
-                  title: "Scholarships",
-                  body: "Fundraisers directly support Amarillo-area students through the Ike Avery Scholarship Fund.",
-                },
-                {
-                  title: "All Cars Welcome",
-                  body: "From longtime cruisers to first-time members, there is a place for every enthusiast here.",
-                },
-              ].map((item) => (
-                <div
-                  key={item.title}
-                  tabIndex={0}
-                  className="group rounded-2xl border border-[var(--color-accent-red)] bg-white px-5 py-5 transition-all duration-300 hover:-translate-y-1 hover:bg-[var(--color-accent-red)] hover:shadow-[0_18px_45px_rgba(227,27,35,0.12)] focus:-translate-y-1 focus:bg-[var(--color-accent-red)] focus:shadow-[0_18px_45px_rgba(227,27,35,0.12)] focus:outline-none"
-                >
-                  <p className="text-xl font-semibold text-[var(--color-accent-red)] transition-colors duration-300 group-hover:text-white group-focus:text-white">
-                    {item.title}
-                  </p>
-                  <div className="grid transition-all duration-300 [grid-template-rows:0fr] group-hover:[grid-template-rows:1fr] group-focus:[grid-template-rows:1fr]">
-                    <div className="overflow-hidden">
-                      <p className="mt-3 text-sm text-white opacity-0 transition-opacity duration-200 delay-75 group-hover:opacity-100 group-focus:opacity-100">
-                        {item.body}
-                      </p>
+            <div className="flex shrink-0 flex-col gap-3 sm:flex-row sm:items-center">
+              {hasCountdown ? (
+                <div className="grid grid-cols-4 gap-2">
+                  {countdown.map((item) => (
+                    <div key={item.label} className="min-w-[3.75rem] rounded-md bg-white/12 px-2 py-2 text-center">
+                      <p className="text-lg font-semibold tabular-nums leading-none">{item.value}</p>
+                      <p className="mt-1 text-[10px] uppercase tracking-wider text-white/70">{item.label}</p>
                     </div>
-                  </div>
+                  ))}
                 </div>
-              ))}
+              ) : null}
+              <Button href="/events" variant="outline-light">
+                Event details
+              </Button>
             </div>
           </div>
-          <div className="overflow-hidden rounded-2xl border border-black/10 bg-white">
-            <img src={home.welcomeImage} alt={home.welcomeTitle} className="h-full w-full object-cover" />
+        </section>
+      ) : null}
+
+      <section className="bg-[var(--color-accent-red)] text-white">
+        <div className="mx-auto grid w-full max-w-6xl items-center gap-8 px-4 py-12 sm:px-6 sm:py-16 lg:grid-cols-2 lg:gap-12 lg:px-8">
+          <div>
+            <h2 className="font-display text-4xl leading-none tracking-wide sm:text-[2.75rem]">{home.welcomeTitle}</h2>
+            <p className="mt-3 text-[15px] leading-relaxed text-white/85">{home.welcomeDescription}</p>
+            <Link href="/about" className="mt-5 inline-flex h-10 items-center rounded-md bg-white px-4 text-sm font-semibold text-[var(--color-accent-red)] transition-colors hover:bg-white/90">
+              About the club
+            </Link>
+          </div>
+          <div className="overflow-hidden rounded-lg">
+            <img src={home.welcomeImage} alt="" className="aspect-[4/3] h-full w-full object-cover" />
           </div>
         </div>
       </section>
 
       <section className="bg-white text-black">
-        <div className="mx-auto grid w-full max-w-6xl gap-6 px-4 py-14 sm:px-6 lg:grid-cols-[1fr_1fr] lg:px-8">
-          <div className="overflow-hidden rounded-2xl border border-black/10 bg-white">
-            <img src={home.joinImage} alt={home.joinTitle} className="h-full w-full object-cover" />
+        <div className="mx-auto grid w-full max-w-6xl items-center gap-8 px-4 py-12 sm:px-6 sm:py-16 lg:grid-cols-2 lg:gap-12 lg:px-8">
+          <div className="order-2 overflow-hidden rounded-lg lg:order-1">
+            <img src={home.joinImage} alt="" className="aspect-[4/3] h-full w-full object-cover" />
           </div>
-          <div className="flex h-full min-h-[180px] flex-col justify-center rounded-2xl border border-black/0 bg-white p-6 text-black sm:p-8 lg:p-12">
-            <div>
-              <h3 className="font-display text-3xl tracking-wide">{home.joinTitle}</h3>
-              <p className="mt-3 max-w-xl text-sm text-black/70">{home.joinDescription}</p>
-            </div>
-            <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+          <div className="order-1 lg:order-2">
+            <p className="text-xs font-semibold uppercase tracking-wider text-[var(--color-accent-red)]">{home.joinEyebrow}</p>
+            <h2 className="mt-1 font-display text-4xl leading-none tracking-wide sm:text-[2.75rem]">{home.joinTitle}</h2>
+            <p className="mt-3 max-w-lg text-[15px] leading-relaxed text-black/70">{home.joinDescription}</p>
+            <div className="mt-6 flex flex-wrap gap-2.5">
               <Button
                 href={home.joinPrimaryHref}
-                variant="primary"
-                className="border border-[var(--color-accent-green)] bg-[var(--color-accent-green)] text-white hover:brightness-110"
+                variant="green"
               >
                 {home.joinPrimaryLabel}
               </Button>
-              <Button href={home.joinSecondaryHref} variant="accent">
+              <Button href={home.joinSecondaryHref} variant="outline">
                 {home.joinSecondaryLabel}
               </Button>
             </div>
@@ -183,40 +149,27 @@ export function HomeContent() {
         </div>
       </section>
 
-      <section className="bg-white text-black">
-        <div className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
-          <h2 className="text-center font-display text-4xl tracking-wide sm:text-5xl">{home.missionTitle}</h2>
-          <div className="mt-10 grid gap-4 md:grid-cols-3">
-            {[
-              {
-                title: home.missionOneTitle,
-                body: home.missionOneBody,
-                href: home.missionOneHref,
-                cardClass: "border-[var(--color-accent-red)]/20 bg-[var(--color-accent-red)] text-white!",
-                buttonClass: "border-white text-white hover:bg-white/20",
-              },
-              {
-                title: home.missionTwoTitle,
-                body: home.missionTwoBody,
-                href: home.missionTwoHref,
-                cardClass: "border-[var(--color-accent-green)]/20 bg-[var(--color-accent-green)] text-white!",
-                buttonClass: "border-white text-white hover:bg-white/20",
-              },
-              {
-                title: home.missionThreeTitle,
-                body: home.missionThreeBody,
-                href: home.missionThreeHref,
-                cardClass: "border-black/15 bg-black text-white!",
-                buttonClass: "border-white text-white hover:bg-white/20",
-              },
-            ].map((item) => (
-              <div key={item.title} className={`rounded-2xl border p-6 shadow-sm ${item.cardClass}`}>
-                <h3 className="font-display text-2xl tracking-wide text-white">{item.title}</h3>
-                <p className="mt-3 text-sm text-white/85">{item.body}</p>
-                <Button href={item.href} variant="outline" className={`mt-5 ${item.buttonClass}`}>
-                  Learn More
-                </Button>
-              </div>
+      <section className="bg-black text-white">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+          <h2 className="font-display text-4xl leading-none tracking-wide sm:text-[2.75rem]">{home.missionTitle}</h2>
+          <div className="mt-6 grid gap-3 sm:mt-8 md:grid-cols-3 md:gap-4">
+            {missions.map((item, index) => (
+              <Link
+                key={item.title}
+                href={item.href}
+                className="group relative block aspect-[16/9] overflow-hidden rounded-lg bg-white/10 ring-1 ring-white/10 md:aspect-[4/5]"
+              >
+                <img
+                  src={missionImages[index]}
+                  alt=""
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-5">
+                  <span className={`block h-1 w-8 rounded-full ${item.accent}`} />
+                  <h3 className="mt-3 font-display text-3xl leading-none tracking-wide text-white sm:text-4xl">{item.title}</h3>
+                </div>
+              </Link>
             ))}
           </div>
         </div>

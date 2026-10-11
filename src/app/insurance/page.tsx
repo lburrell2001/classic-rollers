@@ -61,19 +61,19 @@ const coverage = [
     title: "Classic & Collector Cars",
     body: "Agreed value policies from specialty carriers for the classics, customs, and show cars that roll with the club.",
     href: insurancePartner.classicCarPage,
-    cardClass: "border-[var(--color-accent-red)]/20 bg-[var(--color-accent-red)]",
+    accent: "bg-[var(--color-accent-red)]",
   },
   {
     title: "Everyday Drivers",
     body: "Auto, commercial trucking, and motorcycle coverage for the vehicles you drive the rest of the week.",
     href: insurancePartner.website,
-    cardClass: "border-[var(--color-accent-green)]/20 bg-[var(--color-accent-green)]",
+    accent: "bg-[var(--color-accent-green)]",
   },
   {
     title: "Home, RV & Business",
     body: "Home, renters, RV, rental property, and business liability coverage for Texas families and local firms.",
     href: insurancePartner.website,
-    cardClass: "border-black/15 bg-black",
+    accent: "bg-black",
   },
 ];
 
@@ -84,13 +84,13 @@ export default function InsurancePage() {
       <Section
         title="Classic Car Insurance"
         description={`Every car in the Unlimited Classic Rollers Car Club is insured by ${insurancePartner.agentName} of ${insurancePartner.agencyName}, the club's official insurance partner.`}
-        className="pt-32 text-white lg:pt-40"
+        className="pt-24 text-white sm:pt-28 lg:pt-32"
         titleClassName="text-white"
         descriptionClassName="text-white/70"
       >
         <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
           <Card>
-            <h3 className="font-display text-3xl tracking-wide">Agreed Value Coverage</h3>
+            <h3 className="font-display text-2xl tracking-wide sm:text-3xl">Agreed Value Coverage</h3>
             <p className="mt-3 text-black/70">
               A standard auto policy pays actual cash value, which is usually far less than what a classic is really worth. With agreed value
               coverage, you and the carrier settle on your car&apos;s value when the policy is written. If it&apos;s totaled, that amount is
@@ -106,7 +106,7 @@ export default function InsurancePage() {
           </Card>
 
           <Card className="border-[var(--color-accent-green)]">
-            <h3 className="font-display text-3xl tracking-wide">Get a Quote</h3>
+            <h3 className="font-display text-2xl tracking-wide sm:text-3xl">Get a Quote</h3>
             <p className="mt-3 text-black/70">Tell {insurancePartner.agentName} you&apos;re with the Classic Rollers.</p>
             <div className="mt-5 space-y-2 text-black/75">
               <p>
@@ -122,7 +122,7 @@ export default function InsurancePage() {
                 <strong>Hours:</strong> {insurancePartner.hours}
               </p>
             </div>
-            <div className="mt-6 flex flex-col gap-3 sm:flex-row lg:flex-col xl:flex-row">
+            <div className="mt-6 flex flex-wrap gap-2.5">
               <Button href={insurancePartner.phoneHref} variant="accent">
                 Call {insurancePartner.agentName.split(" ")[0]}
               </Button>
@@ -130,8 +130,7 @@ export default function InsurancePage() {
                 href={insurancePartner.classicCarPage}
                 target="_blank"
                 rel="noopener"
-                variant="primary"
-                className="border border-[var(--color-accent-green)] bg-[var(--color-accent-green)] text-white hover:brightness-110"
+                variant="green"
               >
                 Request a Quote
               </Button>
@@ -141,17 +140,16 @@ export default function InsurancePage() {
       </Section>
 
       <section className="bg-white text-black">
-        <div className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
-          <h2 className="text-center font-display text-4xl tracking-wide sm:text-5xl">Coverage from Texas Home &amp; Highway</h2>
-          <div className="mt-10 grid gap-4 md:grid-cols-3">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+          <h2 className="font-display text-4xl leading-none tracking-wide sm:text-[2.75rem]">Coverage from Texas Home &amp; Highway</h2>
+          <div className="mt-8 grid gap-8 md:grid-cols-3 md:gap-6">
             {coverage.map((item) => (
-              <div key={item.title} className={`rounded-2xl border p-6 text-white shadow-sm ${item.cardClass}`}>
-                <h3 className="font-display text-2xl tracking-wide text-white">{item.title}</h3>
-                <p className="mt-3 text-sm text-white/85">{item.body}</p>
-                <Button href={item.href} target="_blank" rel="noopener" variant="outline" className="mt-5 border-white text-white hover:bg-white/20">
-                  Learn More
-                </Button>
-              </div>
+              <a key={item.title} href={item.href} target="_blank" rel="noopener" className="group block">
+                <span className={`block h-1 w-10 rounded-full ${item.accent}`} />
+                <h3 className="mt-4 font-display text-2xl tracking-wide">{item.title}</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-black/65">{item.body}</p>
+                <span className="mt-3 inline-block text-sm font-semibold underline-offset-4 group-hover:underline">Learn more →</span>
+              </a>
             ))}
           </div>
         </div>

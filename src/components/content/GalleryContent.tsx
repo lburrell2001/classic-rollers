@@ -59,23 +59,23 @@ export function GalleryContent() {
           eyebrow={gallery.eyebrow}
           title={gallery.title}
           description={gallery.description}
-          className="pt-32 text-white lg:pt-40"
+          className="pt-24 text-white sm:pt-28 lg:pt-32"
           titleClassName="text-white"
           descriptionClassName="text-white/70"
-          contentClassName="mt-10"
+          contentClassName="mt-6 sm:mt-8"
         >
-          <div className="columns-1 gap-0 sm:columns-2 md:columns-3 lg:columns-4">
+          <div className="columns-2 gap-2 md:columns-3 lg:columns-4">
             {gallery.images.map((image) => (
               <button
                 key={image.id}
                 type="button"
-                className="mb-0 block w-full break-inside-avoid overflow-hidden text-left"
+                className="mb-2 block w-full break-inside-avoid overflow-hidden rounded-md text-left"
                 onClick={() => setActiveImageId(image.id)}
               >
                 <img
                   src={image.src}
                   alt={image.alt}
-                  className="block h-auto w-full cursor-zoom-in transition-transform duration-500 hover:scale-105"
+                  className="block h-auto w-full cursor-zoom-in transition-transform duration-500 hover:scale-[1.03]"
                 />
               </button>
             ))}

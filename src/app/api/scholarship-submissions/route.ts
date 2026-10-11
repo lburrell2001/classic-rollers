@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { scholarshipEnabled } from "@/lib/features";
 import { appendScholarshipSubmission, isSupabaseConfigured, readPublishedSiteContent } from "@/lib/supabase";
 
 type ScholarshipSubmissionBody = {
@@ -19,6 +20,10 @@ function requireField(value: string | undefined, label: string) {
 }
 
 export async function POST(request: Request) {
+  if (!scholarshipEnabled) {
+    return NextResponse.json({ error: "Scholarship applications are closed." }, { status: 410 });
+  }
+
   try {
     if (!isSupabaseConfigured()) {
       return NextResponse.json({ error: "Supabase is not configured." }, { status: 500 });

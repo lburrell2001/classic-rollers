@@ -116,7 +116,7 @@ export function ScholarshipContent() {
         eyebrow={scholarship.eyebrow}
         title={scholarship.title}
         description={scholarship.description}
-        className="pt-32 text-black lg:pt-40"
+        className="pt-24 text-black sm:pt-28 lg:pt-32"
         titleClassName="text-white"
         descriptionClassName="text-white/70"
       >
@@ -125,7 +125,7 @@ export function ScholarshipContent() {
             {scholarship.items.length ? (
               scholarship.items.map((item) => (
                 <Card key={item.id}>
-                  <h3 className="font-display text-3xl tracking-wide">{item.title}</h3>
+                  <h3 className="font-display text-2xl tracking-wide sm:text-3xl">{item.title}</h3>
                   <p className="mt-3 text-black/70">{item.summary}</p>
                   <div className="mt-5 space-y-2 text-black/75">
                     <p>
@@ -161,7 +161,7 @@ export function ScholarshipContent() {
           </div>
 
           <Card>
-            <h3 className="font-display text-3xl tracking-wide">Scholarship Form</h3>
+            <h3 className="font-display text-2xl tracking-wide sm:text-3xl">Scholarship Form</h3>
             <p className="mt-2 text-sm text-black/70">Submit your application online and the admin team will be able to review it in the portal.</p>
 
             <form className="mt-5 space-y-4" onSubmit={submitForm}>

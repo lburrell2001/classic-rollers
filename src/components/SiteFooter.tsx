@@ -2,47 +2,60 @@ import Image from "next/image";
 import Link from "next/link";
 import { insurancePartner } from "@/lib/insurance-partner";
 
+const footerLinks = [
+  { href: "/events", label: "Events" },
+  { href: "/membership", label: "Membership" },
+  { href: "/gallery", label: "Gallery" },
+  { href: "/about", label: "About" },
+  { href: "/donate", label: "Donate" },
+  { href: "/insurance", label: "Insurance" },
+];
+
 export function SiteFooter() {
   return (
-    <footer className="border-t border-black/10 bg-black text-white">
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-10 sm:px-6 md:flex-row md:items-end md:justify-between lg:px-8">
+    <footer className="bg-black text-white">
+      <div className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-10 sm:px-6 md:grid-cols-[1.2fr_1fr_1fr] lg:px-8">
         <div>
-          <Link href="/" className="inline-flex rounded-2xl bg-white px-4 py-3" aria-label="Classic Rollers home">
-            <Image src="/classicrollers-logo.svg" alt="Classic Rollers" width={254} height={91} className="h-[4.5rem] w-auto" />
+          <Link href="/" className="inline-flex rounded-md bg-white px-2.5 py-1.5" aria-label="Classic Rollers home">
+            <Image src="/classicrollers-logo.svg" alt="Classic Rollers" width={254} height={91} className="h-10 w-auto" />
           </Link>
-          <p className="mt-4 text-sm text-white">PO Box 5513, Amarillo, TX 79117</p>
-          <p className="mt-2 text-xs text-white">© {new Date().getFullYear()} Unlimited Classic Rollers Car Club. All rights reserved.</p>
+          <p className="mt-4 text-sm text-white/70">Unlimited Classic Rollers Car Club</p>
+          <p className="text-sm text-white/70">PO Box 5513, Amarillo, TX 79117</p>
         </div>
-        <div className="flex flex-col gap-3 md:items-end">
-          <div className="flex flex-col gap-2 md:items-end">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-accent-green)]">Official Insurance Partner</p>
-            <Link
-              href="/insurance"
-              className="inline-flex items-center justify-center rounded-xl border border-white/20 px-5 py-3 text-sm font-semibold tracking-wide transition hover:border-[var(--color-accent-green)] hover:bg-[var(--color-accent-green)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-green)] focus-visible:ring-offset-2"
-            >
-              {insurancePartner.agencyName}
-            </Link>
-            <p className="text-xs text-white/70">
-              Club cars insured by {insurancePartner.agentName} ·{" "}
-              <a href={insurancePartner.phoneHref} className="underline underline-offset-2 hover:text-white">
-                {insurancePartner.phone}
-              </a>
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href="/membership"
-              className="inline-flex items-center justify-center rounded-xl border border-white/20 px-5 py-3 text-sm font-semibold tracking-wide transition hover:border-[var(--color-accent-green)] hover:bg-[var(--color-accent-green)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-green)] focus-visible:ring-offset-2"
-            >
-              Membership
-            </Link>
-            <Link
-              href="/admin"
-              className="inline-flex items-center justify-center rounded-xl border border-white/20 px-5 py-3 text-sm font-semibold tracking-wide transition hover:border-[var(--color-accent-red)] hover:bg-[var(--color-accent-red)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-green)] focus-visible:ring-offset-2"
-            >
-              Admin Login
-            </Link>
-          </div>
+
+        <nav aria-label="Footer navigation">
+          <p className="text-xs font-semibold uppercase tracking-wider text-white/50">Explore</p>
+          <ul className="mt-3 grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
+            {footerLinks.map((link) => (
+              <li key={link.href}>
+                <Link href={link.href} className="text-white/80 hover:text-white">
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wider text-white/50">Official Insurance Partner</p>
+          <Link href="/insurance" className="mt-3 inline-block text-sm font-semibold text-white hover:text-[var(--color-accent-green)]">
+            {insurancePartner.agencyName}
+          </Link>
+          <p className="mt-1 text-sm text-white/70">
+            {insurancePartner.agentName} ·{" "}
+            <a href={insurancePartner.phoneHref} className="hover:text-white">
+              {insurancePartner.phone}
+            </a>
+          </p>
+        </div>
+      </div>
+
+      <div className="border-t border-white/10">
+        <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-4 py-4 text-xs text-white/50 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
+          <p>© {new Date().getFullYear()} Unlimited Classic Rollers Car Club. All rights reserved.</p>
+          <Link href="/admin" className="hover:text-white">
+            Admin login
+          </Link>
         </div>
       </div>
     </footer>

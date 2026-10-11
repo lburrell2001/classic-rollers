@@ -1,7 +1,8 @@
 import type { MetadataRoute } from "next";
+import { scholarshipEnabled } from "@/lib/features";
 
 const baseUrl = "https://classicrollersamatx.org";
-const routes = ["", "/events", "/scholarship", "/membership", "/gallery", "/about", "/donate", "/insurance"];
+const routes = ["", "/events", ...(scholarshipEnabled ? ["/scholarship"] : []), "/membership", "/gallery", "/about", "/donate", "/insurance"];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return routes.map((route) => ({

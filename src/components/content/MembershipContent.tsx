@@ -39,11 +39,11 @@ function InputField({
   type?: string;
 }) {
   const className =
-    "mt-2 w-full rounded-2xl border border-black/15 bg-white px-4 py-3 text-sm text-black outline-none transition focus:border-[var(--color-accent-green)] focus:ring-2 focus:ring-[var(--color-accent-green)]/20";
+    "mt-1.5 w-full rounded-md border border-black/20 bg-white px-3 py-2.5 text-[15px] text-black outline-none transition focus:border-[var(--color-accent-green)] focus:ring-2 focus:ring-[var(--color-accent-green)]/20";
 
   return (
     <label className="block">
-      <span className="text-xs font-semibold uppercase tracking-[0.18em] text-black/60">{label}</span>
+      <span className="text-sm font-medium text-black/80">{label}</span>
       {multiline ? (
         <textarea value={value} onChange={(event) => onChange(event.target.value)} className={`${className} min-h-28 resize-y`} />
       ) : (
@@ -86,7 +86,7 @@ export function MembershipContent() {
       }
 
       setForm(emptyForm);
-      setSubmitMessage("Membership form submitted. The club can now review it in the admin portal.");
+      setSubmitMessage("Thanks! Your application was sent to the club.");
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : "Failed to submit membership form.");
     } finally {
@@ -97,15 +97,14 @@ export function MembershipContent() {
   return (
     <div className="bg-[linear-gradient(to_bottom,var(--color-accent-green)_0,var(--color-accent-green)_70vh,#ffffff_25vh,#ffffff_100%)]">
       <Section
-        
         title={membership.title}
         description={membership.description}
-        className="pt-32 text-white lg:pt-40"
+        className="pt-24 text-white sm:pt-28 lg:pt-32"
         titleClassName="text-white"
         descriptionClassName="text-white/70"
       >
         <Card>
-          <h3 className="font-display text-3xl tracking-wide">{membership.detailsTitle}</h3>
+          <h3 className="font-display text-2xl tracking-wide sm:text-3xl">{membership.detailsTitle}</h3>
           <p className="mt-3 text-black/70">
             <strong>Annual dues:</strong> {membership.annualDues}
           </p>
@@ -114,24 +113,20 @@ export function MembershipContent() {
           </p>
           <div className="mt-6 grid gap-5 border-t border-black/10 pt-6 lg:grid-cols-2">
             <div>
-              <p className="text-s font-bold uppercase tracking-[0.18em] text-[var(--color-accent-red)]">{membership.benefitsTitle}</p>
+              <p className="text-sm font-semibold text-[var(--color-accent-red)]">{membership.benefitsTitle}</p>
               <p className="mt-2 text-sm text-black/70">{membership.benefitsBody}</p>
             </div>
             <div>
-              <p className="text-s font-bold uppercase tracking-[0.18em] text-[var(--color-accent-red)]">{membership.fitTitle}</p>
+              <p className="text-sm font-semibold text-[var(--color-accent-red)]">{membership.fitTitle}</p>
               <p className="mt-2 text-sm text-black/70">{membership.fitBody}</p>
             </div>
           </div>
-          <p className="mt-12 text-sm text-black/70">
-            Use the form to apply for membership. Submissions go directly to the admin portal for review.
-          </p>
-
-          <div className="mb-6 mt-4 border-t border-black/10 pt-6">
-            <h3 className="font-display text-3xl tracking-wide">Submit Your Membership Request</h3>
-            <p className="mt-2 text-sm text-black/70">Fill out the form below and the submission will appear in the admin portal.</p>
+          <div className="mb-6 mt-8 border-t border-black/10 pt-8">
+            <h3 className="font-display text-2xl tracking-wide sm:text-3xl">Apply for Membership</h3>
+            <p className="mt-1 text-sm text-black/70">Fill out the form and a club officer will follow up with you.</p>
           </div>
 
-          <form className="grid gap-5 md:grid-cols-2" onSubmit={submitForm}>
+          <form className="grid gap-4 md:grid-cols-2" onSubmit={submitForm}>
             <InputField label="Full Name" value={form.fullName} onChange={(value) => updateField("fullName", value)} />
             <InputField label="Email" type="email" value={form.email} onChange={(value) => updateField("email", value)} />
             <InputField label="Phone" value={form.phone} onChange={(value) => updateField("phone", value)} />
@@ -149,9 +144,9 @@ export function MembershipContent() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="inline-flex rounded-full bg-[var(--color-accent-red)] px-6 py-3 text-sm font-semibold text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70"
+                className="inline-flex h-11 w-full items-center justify-center rounded-md bg-[var(--color-accent-red)] px-5 text-sm font-semibold text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
               >
-                {isSubmitting ? "Submitting..." : "Submit Membership Form"}
+                {isSubmitting ? "Submitting..." : "Submit Application"}
               </button>
             </div>
           </form>

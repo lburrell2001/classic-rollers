@@ -6,24 +6,86 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ContactForm } from "@/components/ContactForm";
 import { DonateTrigger } from "@/components/DonateTrigger";
+import { scholarshipEnabled } from "@/lib/features";
 import { cn } from "@/lib/utils";
 
-const desktopNavLinks = [
+const navLinks = [
   { href: "/", label: "Home" },
   { href: "/events", label: "Events" },
-  { href: "/scholarship", label: "Scholarship" },
-  { href: "/gallery", label: "Gallery" },
-  { href: "/insurance", label: "Insurance" },
-];
-
-const mobileNavLinks = [
-  { href: "/", label: "Home" },
-  { href: "/events", label: "Events" },
-  { href: "/scholarship", label: "Scholarship" },
+  ...(scholarshipEnabled ? [{ href: "/scholarship", label: "Scholarship" }] : []),
   { href: "/membership", label: "Membership" },
   { href: "/gallery", label: "Gallery" },
   { href: "/insurance", label: "Insurance" },
 ];
+
+// Pages whose hero sits on a dark or colored background behind the transparent header.
+const darkHeroPaths = ["/about", "/events", "/scholarship", "/membership", "/gallery", "/donate", "/insurance"];
+
+function CloseIcon() {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" className="h-5 w-5" aria-hidden="true">
+      <path d="M5 5l10 10M15 5L5 15" />
+    </svg>
+  );
+}
+
+function MenuIcon() {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" className="h-5 w-5" aria-hidden="true">
+      <path d="M3 6h14M3 10h14M3 14h14" />
+    </svg>
+  );
+}
+
+function Modal({
+  label,
+  accentClass,
+  title,
+  subtitle,
+  intro,
+  onClose,
+  children,
+}: {
+  label: string;
+  accentClass: string;
+  title: string;
+  subtitle: string;
+  intro: string;
+  onClose: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 sm:items-center sm:p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-label={label}
+      onClick={onClose}
+    >
+      <div
+        className="max-h-[92vh] w-full max-w-lg overflow-auto rounded-t-xl bg-white shadow-xl sm:rounded-lg"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className={cn("flex items-start justify-between gap-4 px-5 py-5 text-white sm:px-6", accentClass)}>
+          <div>
+            <h2 className="font-display text-3xl leading-none tracking-wide">{title}</h2>
+            <p className="mt-2 text-sm text-white/85">{subtitle}</p>
+            <p className="mt-2 text-sm text-white/85">{intro}</p>
+          </div>
+          <button
+            type="button"
+            aria-label="Close"
+            className="-mr-2 -mt-1 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-white hover:bg-white/15"
+            onClick={onClose}
+          >
+            <CloseIcon />
+          </button>
+        </div>
+        <div className="px-5 py-5 sm:px-6 sm:py-6">{children}</div>
+      </div>
+    </div>
+  );
+}
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -31,9 +93,10 @@ export function SiteHeader() {
   const [contactOpen, setContactOpen] = useState(false);
   const [donateOpen, setDonateOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const useLightHeaderText = pathname !== "/" && !isScrolled && !mobileOpen;
-  const useGreenDonateButton = pathname === "/scholarship" && !isScrolled && !mobileOpen;
-  const useLogoBadge = (pathname === "/events" || pathname === "/scholarship" || pathname === "/insurance") && !isScrolled && !mobileOpen;
+  const isOverHero = darkHeroPaths.includes(pathname) && !isScrolled && !mobileOpen;
+  const useLightHeaderText = isOverHero;
+  const useGreenDonateButton = (pathname === "/scholarship" || pathname === "/about") && isOverHero;
+  const useLogoBadge = isOverHero;
 
   useEffect(() => {
     if (!contactOpen && !donateOpen) return;
@@ -70,50 +133,54 @@ export function SiteHeader() {
     <>
       <header
         className={cn(
-          "sticky top-0 z-40 transition-colors duration-300",
-          isScrolled || mobileOpen ? "border-b border-black/10 bg-white shadow-sm" : "bg-transparent",
+          "sticky top-0 z-40 transition-colors duration-200",
+          isScrolled || mobileOpen ? "border-b border-black/10 bg-white" : "bg-transparent",
         )}
       >
-        <div className="mx-auto flex h-24 w-full max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-6 px-4 sm:h-20 sm:px-6 lg:px-8">
           <Link
             href="/"
-            className={cn(
-              "inline-flex items-center self-start",
-              useLogoBadge
-                ? "mt-3 rounded-2xl bg-white px-4 py-3 shadow-[0_10px_30px_-18px_rgba(0,0,0,0.55)] sm:mt-4"
-                : "pt-3 sm:pt-4",
-            )}
+            className={cn("inline-flex shrink-0 items-center rounded-md transition-colors", useLogoBadge ? "bg-white px-2.5 py-1.5" : "")}
             aria-label="Classic Rollers home"
           >
-            <Image src="/classicrollers-logo.svg" alt="Classic Rollers" width={236} height={85} priority className="h-16 w-auto sm:h-[4.5rem]" />
+            <Image src="/classicrollers-logo.svg" alt="Classic Rollers" width={236} height={85} priority className="h-10 w-auto sm:h-12" />
           </Link>
 
-          <nav className="hidden items-center gap-5 md:flex" aria-label="Main navigation">
-            {desktopNavLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "text-sm font-medium transition-colors",
-                  useLightHeaderText ? "text-white/85 hover:text-white" : "text-black/80 hover:text-black",
-                )}
-              >
-                {link.label}
-              </Link>
-            ))}
+          <nav className="hidden items-center gap-1 md:flex" aria-label="Main navigation">
+            {navLinks.map((link) => {
+              const isActive = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
+
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  aria-current={isActive ? "page" : undefined}
+                  className={cn(
+                    "rounded-md px-2.5 py-2 text-sm font-medium transition-colors lg:px-3",
+                    useLightHeaderText
+                      ? isActive
+                        ? "text-white"
+                        : "text-white/75 hover:text-white"
+                      : isActive
+                        ? "text-black"
+                        : "text-black/60 hover:text-black",
+                  )}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
             <button
               type="button"
               className={cn(
-                "inline-flex h-11 items-center justify-center rounded-xl px-5 text-sm font-semibold tracking-wide transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-green)] focus-visible:ring-offset-2 focus-visible:ring-offset-white",
-                useLightHeaderText
-                  ? "border border-white/30 bg-white/10 text-white hover:bg-white/20"
-                  : "border border-black/20 bg-white/80 text-black hover:bg-white",
+                "ml-2 inline-flex h-9 items-center justify-center rounded-md border px-3.5 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-green)] focus-visible:ring-offset-2",
+                useLightHeaderText ? "border-white/35 text-white hover:bg-white/10" : "border-black/20 text-black hover:bg-black/5",
               )}
               onClick={() => setContactOpen(true)}
             >
               Contact
             </button>
-            <DonateTrigger size="md" colorScheme={useGreenDonateButton ? "on-red" : "default"}>
+            <DonateTrigger className="ml-2 h-9 px-3.5" colorScheme={useGreenDonateButton ? "on-red" : "default"}>
               Donate
             </DonateTrigger>
           </nav>
@@ -121,149 +188,101 @@ export function SiteHeader() {
           <button
             type="button"
             className={cn(
-              "inline-flex h-10 w-10 items-center justify-center rounded-xl md:hidden",
-              useLightHeaderText ? "border border-white/30 text-white" : "border border-black/20 text-black",
+              "inline-flex h-10 w-10 items-center justify-center rounded-md md:hidden",
+              useLightHeaderText ? "text-white hover:bg-white/10" : "text-black hover:bg-black/5",
             )}
             onClick={() => setMobileOpen((prev) => !prev)}
             aria-expanded={mobileOpen}
-            aria-label="Toggle menu"
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
           >
-            <span className="text-lg leading-none">{mobileOpen ? "x" : "="}</span>
+            {mobileOpen ? <CloseIcon /> : <MenuIcon />}
           </button>
         </div>
 
         <nav
           className={cn(
-            "overflow-hidden bg-white/95 px-4 transition-all duration-300 md:hidden",
-            mobileOpen ? "max-h-96 border-t border-black/10 py-3 opacity-100" : "max-h-0 py-0 opacity-0",
+            "overflow-hidden bg-white px-4 transition-all duration-200 md:hidden",
+            mobileOpen ? "max-h-[28rem] border-t border-black/10 pb-4 pt-2 opacity-100" : "max-h-0 opacity-0",
           )}
           aria-label="Mobile navigation"
         >
-          <div className="min-h-0">
-            <div className="flex flex-col gap-1">
-              {mobileNavLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="rounded-lg px-3 py-2 text-sm font-medium text-black/85 hover:bg-black/5"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              ))}
-              <button
-                type="button"
-                className="rounded-lg px-3 py-2 text-left text-sm font-medium text-black/85 hover:bg-black/5"
-                onClick={() => {
-                  setMobileOpen(false);
-                  setContactOpen(true);
-                }}
+          <div className="flex flex-col">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={cn(
+                  "border-b border-black/5 py-3 text-[15px] font-medium",
+                  (link.href === "/" ? pathname === "/" : pathname.startsWith(link.href)) ? "text-[var(--color-accent-red)]" : "text-black/80",
+                )}
+                onClick={() => setMobileOpen(false)}
               >
-                Contact
-              </button>
-              <button
-                type="button"
-                className="rounded-lg px-3 py-2 text-left text-sm font-medium text-black/85 hover:bg-black/5"
-                onClick={() => {
-                  setMobileOpen(false);
-                  setDonateOpen(true);
-                }}
-              >
-                Donate
-              </button>
-            </div>
+                {link.label}
+              </Link>
+            ))}
+          </div>
+          <div className="mt-4 grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              className="inline-flex h-10 items-center justify-center rounded-md border border-black/20 text-sm font-semibold text-black"
+              onClick={() => {
+                setMobileOpen(false);
+                setContactOpen(true);
+              }}
+            >
+              Contact
+            </button>
+            <button
+              type="button"
+              className="inline-flex h-10 items-center justify-center rounded-md bg-[var(--color-accent-red)] text-sm font-semibold text-white"
+              onClick={() => {
+                setMobileOpen(false);
+                setDonateOpen(true);
+              }}
+            >
+              Donate
+            </button>
           </div>
         </nav>
       </header>
 
       {contactOpen ? (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-3 sm:p-4"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Contact Classic Rollers"
-          onClick={() => setContactOpen(false)}
+        <Modal
+          label="Contact Classic Rollers"
+          accentClass="bg-[var(--color-accent-red)]"
+          title="Contact Classic Rollers"
+          subtitle="PO Box 5513, Amarillo, TX 79117"
+          intro="Questions about membership, events, or donations? Send us a note."
+          onClose={() => setContactOpen(false)}
         >
-          <div
-            className="max-h-[92vh] w-full max-w-2xl overflow-auto rounded-2xl bg-[linear-gradient(to_bottom,var(--color-accent-red)_0,var(--color-accent-red)_48%,#ffffff_34%,#ffffff_100%)] shadow-2xl sm:max-h-[90vh] sm:bg-[linear-gradient(to_bottom,var(--color-accent-red)_0,var(--color-accent-red)_60%,#ffffff_42%,#ffffff_100%)]"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <div className="p-5 sm:p-6 md:p-8">
-              <div className="mb-10 flex items-start justify-between gap-4 text-white">
-                <div>
-                  <h2 className="font-display text-3xl tracking-wide text-white sm:text-4xl">Contact Classic Rollers</h2>
-                  <p className="mt-2 text-sm text-white/80">PO Box 5513, Amarillo, TX 79117</p>
-                  <div className="mt-4 space-y-2 text-sm text-white/85">
-                    <p>Use the form to send a message directly from the site.</p>
-                    <p>Questions about membership, scholarships, or upcoming events all come through here.</p>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  aria-label="Close contact form"
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-white hover:bg-white/10"
-                  onClick={() => setContactOpen(false)}
-                >
-                  x
-                </button>
-              </div>
-
-              <div className="rounded-2xl bg-white p-5 shadow-[0_18px_45px_rgba(0,0,0,0.08)] sm:p-6">
-                <ContactForm />
-              </div>
-            </div>
-          </div>
-        </div>
+          <ContactForm />
+        </Modal>
       ) : null}
 
       {donateOpen ? (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-3 sm:p-4"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Donate to the Ike Avery Scholarship Fund"
-          onClick={() => setDonateOpen(false)}
+        <Modal
+          label="Donate to the Ike Avery Scholarship Fund"
+          accentClass="bg-[var(--color-accent-green)]"
+          title="Donate"
+          subtitle="Classic Rollers Car Club is a 501(c)(3)."
+          intro="Your gift supports the Ike Avery Scholarship Fund for Amarillo-area students."
+          onClose={() => setDonateOpen(false)}
         >
-          <div
-            className="max-h-[92vh] w-full max-w-2xl overflow-auto rounded-2xl bg-[linear-gradient(to_bottom,var(--color-accent-green)_0,var(--color-accent-green)_42%,#ffffff_32%,#ffffff_100%)] shadow-2xl sm:max-h-[90vh] sm:bg-[linear-gradient(to_bottom,var(--color-accent-green)_0,var(--color-accent-green)_48%,#ffffff_42%,#ffffff_100%)]"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <div className="p-5 sm:p-6 md:p-8">
-              <div className="mb-10 flex items-start justify-between gap-4 text-white">
-                <div>
-                  <h2 className="font-display text-3xl tracking-wide text-white sm:text-4xl">Donate to the Scholarship Fund</h2>
-                  <p className="mt-2 text-sm text-white/80">Classic Rollers Car Club is a 501(c)(3).</p>
-                  <div className="mt-4 space-y-2 text-sm text-white/85">
-                    <p>Your donation supports the Ike Avery Scholarship Fund for Amarillo-area students.</p>
-                    <p>Checks, fundraiser support items, and direct giving are all welcome.</p>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  aria-label="Close donate form"
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-white hover:bg-white/10"
-                  onClick={() => setDonateOpen(false)}
-                >
-                  x
-                </button>
-              </div>
-
-              <div className="rounded-2xl bg-white p-5 shadow-[0_18px_45px_rgba(0,0,0,0.08)] sm:p-6">
-                <div className="space-y-4 text-black/75">
-                  <p>
-                    <strong className="text-black">Checks payable to:</strong> Unlimited Classic Rollers Car Club
-                  </p>
-                  <p>
-                    <strong className="text-black">Mail to:</strong> PO Box 5513, Amarillo, TX 79117
-                  </p>
-                  <p>
-                    <strong className="text-black">Also welcome:</strong> Door prizes and giveaway items for fundraiser events.
-                  </p>
-                </div>
-              </div>
+          <dl className="space-y-3 text-sm text-black/75">
+            <div>
+              <dt className="font-semibold text-black">Checks payable to</dt>
+              <dd>Unlimited Classic Rollers Car Club</dd>
             </div>
-          </div>
-        </div>
+            <div>
+              <dt className="font-semibold text-black">Mail to</dt>
+              <dd>PO Box 5513, Amarillo, TX 79117</dd>
+            </div>
+            <div>
+              <dt className="font-semibold text-black">Also welcome</dt>
+              <dd>Door prizes and giveaway items for fundraiser events.</dd>
+            </div>
+          </dl>
+        </Modal>
       ) : null}
     </>
   );

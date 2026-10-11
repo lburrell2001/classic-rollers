@@ -30,14 +30,14 @@ export function Section({
   void eyebrowClassName;
 
   return (
-    <section id={id} className={cn("mx-auto w-full max-w-6xl px-4 py-14 sm:px-6 lg:px-8", className)}>
+    <section id={id} className={cn("mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8", className)}>
       {title ? (
-        <h2 className={cn("font-display text-4xl tracking-wide text-[var(--color-primary)] sm:text-5xl", titleClassName)}>
+        <h2 className={cn("font-display text-4xl leading-none tracking-wide text-[var(--color-primary)] sm:text-[2.75rem]", titleClassName)}>
           {title}
         </h2>
       ) : null}
-      {description ? <p className={cn("mt-3 max-w-2xl text-base text-black/75", descriptionClassName)}>{description}</p> : null}
-      <div className={cn(title || description ? "mt-8" : "", contentClassName)}>{children}</div>
+      {description ? <p className={cn("mt-3 max-w-2xl text-[15px] leading-relaxed text-black/70 sm:text-base", descriptionClassName)}>{description}</p> : null}
+      <div className={cn(title || description ? "mt-6 sm:mt-8" : "", contentClassName)}>{children}</div>
     </section>
   );
 }

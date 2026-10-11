@@ -14,7 +14,7 @@ export default function DonatePage() {
         eyebrow="Donate"
         title="Give to the Ike Avery Scholarship Fund"
         description="Classic Rollers Car Club is a 501(c)(3). Donations are tax-deductible."
-        className="pt-32 text-white lg:pt-40"
+        className="pt-24 text-white sm:pt-28 lg:pt-32"
         titleClassName="text-white"
         descriptionClassName="text-white/70"
       >
