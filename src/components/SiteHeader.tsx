@@ -8,6 +8,7 @@ import { ContactForm } from "@/components/ContactForm";
 import { DonateTrigger } from "@/components/DonateTrigger";
 import { Button } from "@/components/ui/button";
 import { scholarshipEnabled } from "@/lib/features";
+import { insurancePartner } from "@/lib/insurance-partner";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
@@ -176,6 +177,17 @@ export function SiteHeader() {
                 </Link>
               );
             })}
+            <a
+              href={insurancePartner.classicCarPage}
+              target="_blank"
+              rel="noopener"
+              className={cn(
+                "rounded-md px-2.5 py-2 text-sm font-medium transition-colors lg:px-3",
+                useLightHeaderText ? "text-white/75 hover:text-white" : "text-black/60 hover:text-black",
+              )}
+            >
+              Insurance
+            </a>
             <button
               type="button"
               className={cn(
@@ -226,6 +238,15 @@ export function SiteHeader() {
                 {link.label}
               </Link>
             ))}
+            <a
+              href={insurancePartner.classicCarPage}
+              target="_blank"
+              rel="noopener"
+              className="border-b border-black/5 py-3 text-[15px] font-medium text-black/80"
+              onClick={() => setMobileOpen(false)}
+            >
+              Insurance
+            </a>
           </div>
           <div className="mt-4 grid grid-cols-2 gap-2">
             <button
